@@ -1,0 +1,84 @@
+name: Footprint Analytics API Plans
+description: >
+  Footprint Analytics offers tiered access plans for its blockchain Data API,
+  ranging from a free community tier for individual developers and researchers
+  to enterprise plans with high-frequency query support, custom endpoints, and
+  dedicated technical assistance. Pricing details for paid tiers require direct
+  contact with the Footprint sales team.
+url: https://www.footprint.network/data-api
+created: "2026-06-14"
+modified: "2026-06-14"
+plans:
+  - name: Free
+    description: >
+      Free community tier providing access to the Footprint Data API for
+      individual developers, researchers, and small projects. Includes REST
+      and SQL API access with standard rate limits. Community support via
+      GitHub. API key required.
+    price: 0.00
+    currency: USD
+    billing: monthly
+    features:
+      - REST API access
+      - SQL API access
+      - NFT data endpoints
+      - GameFi data endpoints
+      - DeFi protocol data
+      - Token analytics
+      - 30+ blockchain coverage
+      - Community support via GitHub
+      - Standard rate limits
+    rateLimits:
+      - type: requests
+        value: 30
+        unit: per minute
+    contact:
+      url: https://docs.footprint.network/reference/how-to-get-api-key
+
+  - name: Pro
+    description: >
+      Professional tier designed for startups and growing applications requiring
+      higher throughput, priority support, and expanded data access. Supports
+      high-frequency queries and custom data endpoints. Pricing available on
+      request.
+    price: contact
+    currency: USD
+    billing: monthly
+    features:
+      - All Free tier features
+      - Higher rate limits
+      - Priority API support
+      - High-frequency query support
+      - Custom endpoints
+      - Batch data download
+      - Advanced NFT analytics
+      - Advanced DeFi TVL and pool metrics
+      - GameFi economics data
+      - Historical data access
+      - SLA guarantees
+    contact:
+      url: https://www.footprint.network/
+
+  - name: Enterprise
+    description: >
+      Enterprise tier for large organizations and platforms requiring maximum
+      throughput, dedicated infrastructure, custom analytics solutions, tailored
+      dashboards, and white-label integrations. Includes access to Footprint's
+      Data Room for structured cross-chain data pipelines.
+    price: contact
+    currency: USD
+    billing: monthly
+    features:
+      - All Pro tier features
+      - Dedicated infrastructure
+      - Custom analytics solutions
+      - White-label dashboards
+      - Data Room access
+      - Cross-chain data pipelines
+      - Batch download services for large historical datasets
+      - Dedicated technical team support
+      - Custom SLAs
+      - On-chain game economics data
+      - OmniMCP AI agent integration
+    contact:
+      url: https://www.footprint.network/

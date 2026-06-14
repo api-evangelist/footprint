@@ -1,0 +1,91 @@
+name: Footprint Analytics API FinOps
+description: >
+  Financial operations guidance for teams consuming the Footprint Analytics
+  Data API. Covers cost estimation, budget planning, and optimization
+  strategies for NFT, DeFi, GameFi, and token data workloads across free
+  and paid tiers.
+url: https://www.footprint.network/data-api
+created: "2026-06-14"
+modified: "2026-06-14"
+costModel:
+  type: subscription
+  description: >
+    Footprint Analytics uses a subscription-based pricing model. The free tier
+    is available at no cost with standard rate limits. Pro and Enterprise tiers
+    are priced via custom quotes based on query volume, data coverage needs,
+    and support requirements. Contact the Footprint team for enterprise pricing.
+  currency: USD
+  billingPeriods:
+    - monthly
+    - annual
+
+tiers:
+  - name: Free
+    monthlyCost: 0.00
+    includedRequests: ~43,200
+    description: >
+      Approximately 43,200 requests per month assuming 30 requests/minute
+      continuous usage (30 req/min * 60 min * 24 hrs = 43,200/day theoretical
+      max, practical usage lower). Ideal for prototyping, research, and
+      low-volume applications.
+
+  - name: Pro
+    monthlyCost: contact
+    includedRequests: ~432,000
+    description: >
+      Estimated 432,000+ requests per month at 300 req/min throughput.
+      Recommended for production applications serving active users.
+
+  - name: Enterprise
+    monthlyCost: contact
+    includedRequests: custom
+    description: >
+      Custom request volumes and dedicated infrastructure. Includes batch
+      download services for large historical data pulls which reduce per-query
+      costs for bulk data ingestion.
+
+optimizationStrategies:
+  - name: Cache API responses
+    description: >
+      Cache frequently-accessed metrics (floor prices, TVL snapshots, token
+      prices) at your application layer to avoid redundant API calls.
+      Blockchain data updates on block cadence; aggressive caching of
+      historical data is safe.
+
+  - name: Use SQL API for complex aggregations
+    description: >
+      Use the SQL API for complex multi-metric aggregations instead of making
+      multiple REST calls. A single SQL query replacing 10 REST calls reduces
+      both cost and latency.
+
+  - name: Batch downloads for historical data
+    description: >
+      For large historical dataset needs, use Footprint's Batch Download
+      Services rather than paginating through the REST API. Batch downloads
+      are more cost-effective for one-time historical pulls.
+
+  - name: Right-size your plan
+    description: >
+      Monitor your monthly API consumption on the free tier before upgrading.
+      Most analytics dashboards and research tools operate comfortably within
+      free tier limits during development and early production.
+
+  - name: Use targeted endpoints
+    description: >
+      Request only the specific metrics and fields you need rather than
+      pulling full dataset snapshots. DeFi pool, NFT collection, and GameFi
+      endpoints support filtering parameters to minimize data transfer.
+
+budgetAlerts:
+  description: >
+    Footprint Analytics does not publish a self-service billing dashboard for
+    the free tier. Enterprise customers should negotiate budget caps and usage
+    alerts as part of their contract SLA terms.
+
+contacts:
+  - type: Sales
+    url: https://www.footprint.network/
+    description: Contact for Pro and Enterprise pricing inquiries.
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+    description: Free tier API key registration and getting started guide.

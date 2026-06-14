@@ -1,0 +1,67 @@
+name: Footprint Analytics API Rate Limits
+description: >
+  Footprint Analytics enforces rate limits on its Data API to ensure platform
+  stability and fair usage. The free tier applies standard request-per-minute
+  caps, while paid enterprise tiers unlock higher throughput for
+  high-frequency production workloads. Limits apply per API key.
+url: https://docs.footprint.network/docs/get-started
+created: "2026-06-14"
+modified: "2026-06-14"
+rateLimits:
+  - plan: Free
+    limits:
+      - type: requests_per_minute
+        value: 30
+        scope: per API key
+        description: >
+          Free tier API keys are capped at approximately 30 requests per minute
+          across all REST and SQL API endpoints.
+      - type: concurrent_queries
+        value: 5
+        scope: per API key
+        description: >
+          Up to 5 concurrent SQL or REST queries per API key on the free tier.
+
+  - plan: Pro
+    limits:
+      - type: requests_per_minute
+        value: 300
+        scope: per API key
+        description: >
+          Pro tier supports up to 300 requests per minute, suitable for
+          production applications with moderate traffic volumes.
+      - type: concurrent_queries
+        value: 20
+        scope: per API key
+        description: >
+          Up to 20 concurrent queries per API key on the Pro tier.
+
+  - plan: Enterprise
+    limits:
+      - type: requests_per_minute
+        value: custom
+        scope: per API key
+        description: >
+          Enterprise tier rate limits are negotiated based on workload
+          requirements. High-frequency queries and dedicated infrastructure
+          are available.
+      - type: concurrent_queries
+        value: custom
+        scope: per API key
+        description: >
+          Concurrent query limits are customized for enterprise contracts.
+
+headers:
+  - name: X-RateLimit-Limit
+    description: Maximum number of requests allowed in the current window.
+  - name: X-RateLimit-Remaining
+    description: Number of requests remaining in the current rate limit window.
+  - name: X-RateLimit-Reset
+    description: Unix timestamp when the current rate limit window resets.
+
+errors:
+  - code: 429
+    message: Too Many Requests
+    description: >
+      Returned when an API key exceeds the allowed request rate for its plan.
+      Implement exponential backoff and retry logic to handle this error.

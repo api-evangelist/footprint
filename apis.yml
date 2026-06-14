@@ -1,0 +1,76 @@
+name: Footprint Analytics
+description: >
+  Footprint Analytics is a blockchain data analytics platform providing unified
+  REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token
+  analytics, GameFi economics, and on-chain activity across 30+ chains including
+  Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui.
+  The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections,
+  and 3,000+ blockchain games, offering both no-code dashboards and programmatic
+  API access for developers building Web3 data applications.
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/apis.yml
+created: "2026-06-14"
+modified: "2026-06-14"
+specificationVersion: "0.19"
+tags:
+  - Blockchain
+  - DeFi
+  - NFT
+  - GameFi
+  - Token Analytics
+  - On-Chain Data
+  - Web3
+  - Crypto
+apis:
+  - name: Footprint Analytics Data API
+    description: >
+      Unified REST and SQL API providing access to NFT, DeFi, GameFi, and token
+      analytics data across 30+ blockchain networks. Supports raw transaction
+      data, pre-computed metrics, cross-chain aggregates, floor prices, TVL,
+      DEX pool liquidity, wallet profiles, and game economics. Authentication
+      via API key. Both free and paid enterprise tiers available.
+    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    humanURL: https://www.footprint.network/
+    baseURL: https://api.footprint.network
+    tags:
+      - NFT
+      - DeFi
+      - GameFi
+      - Token Analytics
+      - Blockchain Data
+    properties:
+      - type: Documentation
+        url: https://docs.footprint.network/docs/get-started
+      - type: OpenAPI
+        url: https://fp-api.readme.io/llms.txt
+      - type: Authentication
+        url: https://docs.footprint.network/reference/how-to-get-api-key
+      - type: Plans
+        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+      - type: RateLimits
+        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+      - type: FinOps
+        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+    contact:
+      - FN: Footprint Analytics Support
+        url: https://www.footprint.network/
+        email: ""
+common:
+  - type: Website
+    url: https://www.footprint.network/
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: GitHub
+    url: https://github.com/footprintanalytics
+  - type: Blog
+    url: https://medium.com/@footprintofficial
+  - type: Pricing
+    url: https://www.footprint.network/data-api
+  - type: Status
+    url: https://www.footprint.network/
+  - type: ChangeLog
+    url: https://docs.footprint.network/docs/get-started
+maintainers:
+  - FN: Kin Lane
+    url: https://apievangelist.com
+    email: kin@apievangelist.com
