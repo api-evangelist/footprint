@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/footprint/main/json-schema/query.json",
+  "title": "Footprint Analytics Query Request",
+  "description": "Schema for executing a SQL query against the Footprint Analytics blockchain dataset via the Data API.",
+  "type": "object",
+  "required": ["query"],
+  "properties": {
+    "query": {
+      "type": "string",
+      "description": "SQL query string using Trino/Presto-compatible syntax. Queries run against tables covering NFT, DeFi, GameFi, token, wallet, and raw chain data across 30+ blockchains.",
+      "minLength": 1,
+      "examples": [
+        "SELECT collection_name, floor_price FROM nft_collection_daily_stats WHERE chain = 'ethereum' LIMIT 20",
+        "SELECT protocol_name, tvl_usd FROM defi_protocol_daily_stats ORDER BY tvl_usd DESC LIMIT 10"
+      ]
+    },
+    "parameters": {
+      "type": "object",
+      "description": "Named parameters to bind into the query. Prevents SQL injection and enables parameterized queries.",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "boolean" }
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

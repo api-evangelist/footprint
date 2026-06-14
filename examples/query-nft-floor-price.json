@@ -1,0 +1,45 @@
+{
+  "name": "NFT Collection Floor Prices",
+  "description": "Query the top 10 NFT collections on Ethereum by floor price using the Footprint Analytics SQL API.",
+  "request": {
+    "method": "POST",
+    "url": "https://api.footprint.network/api/v1/query",
+    "headers": {
+      "X-API-KEY": "YOUR_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "query": "SELECT collection_name, floor_price_usd, volume_24h_usd, holder_count, chain FROM nft_collection_daily_stats WHERE chain = 'ethereum' AND date_trunc('day', updated_at) = CAST('2024-01-01' AS datetime) ORDER BY floor_price_usd DESC LIMIT 10"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "collection_name": "CryptoPunks",
+          "floor_price_usd": 98500.00,
+          "volume_24h_usd": 1234567.89,
+          "holder_count": 3512,
+          "chain": "ethereum"
+        },
+        {
+          "collection_name": "Bored Ape Yacht Club",
+          "floor_price_usd": 45200.00,
+          "volume_24h_usd": 987654.32,
+          "holder_count": 6248,
+          "chain": "ethereum"
+        }
+      ],
+      "columns": [
+        { "name": "collection_name", "type": "varchar" },
+        { "name": "floor_price_usd", "type": "double" },
+        { "name": "volume_24h_usd", "type": "double" },
+        { "name": "holder_count", "type": "bigint" },
+        { "name": "chain", "type": "varchar" }
+      ],
+      "row_count": 2,
+      "execution_time_ms": 342
+    }
+  }
+}

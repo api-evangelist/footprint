@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/footprint/main/json-schema/track-event.json",
+  "title": "Footprint Growth Analytics Track Event Request",
+  "description": "Schema for tracking a user behavioral event via the Footprint Growth Analytics (FGA) SDK API.",
+  "type": "object",
+  "required": ["event_id", "event_type", "user_id", "event_name"],
+  "properties": {
+    "event_id": {
+      "type": "string",
+      "description": "Unique identifier for this specific event instance. Must be unique per event to prevent duplicate ingestion.",
+      "minLength": 1,
+      "examples": ["evt_abc123", "evt_20240101_login_user456"]
+    },
+    "event_type": {
+      "type": "string",
+      "description": "Standardized event type category. Standard types: install, sign_up, login, open_app, play_game, reward. Custom types are also supported.",
+      "examples": ["login", "sign_up", "install", "open_app", "play_game", "reward"]
+    },
+    "user_id": {
+      "type": "string",
+      "description": "Identifier of the user who performed the event. Should be stable and unique per user across sessions.",
+      "minLength": 1,
+      "examples": ["user_456", "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"]
+    },
+    "event_name": {
+      "type": "string",
+      "description": "Human-readable label for the event, used as the event display name in dashboards.",
+      "minLength": 1,
+      "examples": ["login", "dungeon_complete", "token_purchase"]
+    },
+    "event_properties": {
+      "type": "object",
+      "description": "Custom key-value metadata associated with this specific event occurrence. Stored in the extra_data field for downstream analysis.",
+      "additionalProperties": true,
+      "examples": [
+        { "level": 5, "duration_seconds": 120 },
+        { "token_amount": 100, "currency": "USDC" }
+      ]
+    },
+    "time": {
+      "type": "integer",
+      "description": "Unix timestamp (seconds) of when the event occurred. Defaults to server receipt time if omitted.",
+      "minimum": 0,
+      "examples": [1700000000]
+    }
+  },
+  "additionalProperties": false
+}

@@ -42,7 +42,7 @@ apis:
       - type: Documentation
         url: https://docs.footprint.network/docs/get-started
       - type: OpenAPI
-        url: https://fp-api.readme.io/llms.txt
+        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/openapi/openapi.yml
       - type: Authentication
         url: https://docs.footprint.network/reference/how-to-get-api-key
       - type: Plans

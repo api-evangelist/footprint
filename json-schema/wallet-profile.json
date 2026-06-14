@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/footprint/main/json-schema/wallet-profile.json",
+  "title": "Footprint Analytics Wallet Profile",
+  "description": "Schema for a comprehensive on-chain wallet profile returned by the Footprint Analytics Data API.",
+  "type": "object",
+  "properties": {
+    "wallet_address": {
+      "type": "string",
+      "description": "The blockchain wallet address that was queried.",
+      "pattern": "^(0x[0-9a-fA-F]{40}|[1-9A-HJ-NP-Za-km-z]{25,62})$",
+      "examples": ["0x742d35Cc6634C0532925a3b844Bc454e4438f44e"]
+    },
+    "chain": {
+      "type": "string",
+      "description": "Blockchain network identifier.",
+      "enum": [
+        "ethereum", "bnb", "polygon", "arbitrum", "optimism", "avalanche",
+        "fantom", "solana", "bitcoin", "sui", "starknet", "zksync",
+        "celo", "cronos", "ronin", "moonbeam", "moonriver", "base", "linea", "scroll"
+      ]
+    },
+    "native_balance": {
+      "type": "number",
+      "description": "Balance in the chain's native token (e.g., ETH for Ethereum).",
+      "minimum": 0
+    },
+    "native_balance_usd": {
+      "type": "number",
+      "description": "Native token balance converted to USD at current prices.",
+      "minimum": 0
+    },
+    "token_holdings": {
+      "type": "array",
+      "description": "List of ERC-20 or equivalent token holdings.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "token_address": { "type": "string" },
+          "token_symbol": { "type": "string" },
+          "balance": { "type": "number", "minimum": 0 },
+          "balance_usd": { "type": "number", "minimum": 0 }
+        }
+      }
+    },
+    "nft_holdings_count": {
+      "type": "integer",
+      "description": "Total number of NFT tokens held across all collections.",
+      "minimum": 0
+    },
+    "defi_positions_count": {
+      "type": "integer",
+      "description": "Number of active DeFi protocol positions (LP, lending, staking, etc.).",
+      "minimum": 0
+    },
+    "transaction_count": {
+      "type": "integer",
+      "description": "Total number of on-chain transactions sent by this wallet.",
+      "minimum": 0
+    },
+    "first_tx_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the wallet's first ever on-chain transaction."
+    },
+    "last_tx_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of the wallet's most recent on-chain transaction."
+    }
+  }
+}

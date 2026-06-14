@@ -1,0 +1,45 @@
+{
+  "name": "DeFi Protocol TVL Leaderboard",
+  "description": "Query the top 10 DeFi protocols by Total Value Locked (TVL) across all chains.",
+  "request": {
+    "method": "POST",
+    "url": "https://api.footprint.network/api/v1/query",
+    "headers": {
+      "X-API-KEY": "YOUR_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "query": "SELECT protocol_name, category, chain, tvl_usd, volume_24h_usd FROM defi_protocol_daily_stats ORDER BY tvl_usd DESC LIMIT 10"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "data": [
+        {
+          "protocol_name": "Lido",
+          "category": "liquid_staking",
+          "chain": "ethereum",
+          "tvl_usd": 19800000000.00,
+          "volume_24h_usd": 45000000.00
+        },
+        {
+          "protocol_name": "Uniswap V3",
+          "category": "dex",
+          "chain": "ethereum",
+          "tvl_usd": 4200000000.00,
+          "volume_24h_usd": 1200000000.00
+        }
+      ],
+      "columns": [
+        { "name": "protocol_name", "type": "varchar" },
+        { "name": "category", "type": "varchar" },
+        { "name": "chain", "type": "varchar" },
+        { "name": "tvl_usd", "type": "double" },
+        { "name": "volume_24h_usd", "type": "double" }
+      ],
+      "row_count": 2,
+      "execution_time_ms": 289
+    }
+  }
+}

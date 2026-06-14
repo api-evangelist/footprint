@@ -1,0 +1,26 @@
+{
+  "name": "Verify NFT Holder Eligibility",
+  "description": "Check if a wallet holds at least one token from the Bored Ape Yacht Club NFT collection on Ethereum.",
+  "request": {
+    "method": "GET",
+    "url": "https://api.footprint.network/api/v1/wallet/0x742d35Cc6634C0532925a3b844Bc454e4438f44e/eligibility/nft",
+    "headers": {
+      "X-API-KEY": "YOUR_API_KEY"
+    },
+    "params": {
+      "collection_address": "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d",
+      "chain": "ethereum",
+      "min_count": 1
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "wallet_address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
+      "eligible": true,
+      "current_balance": 2,
+      "required_balance": 1,
+      "checked_at": "2024-01-15T12:00:00Z"
+    }
+  }
+}

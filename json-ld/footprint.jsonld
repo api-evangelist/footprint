@@ -1,0 +1,155 @@
+{
+  "@context": {
+    "@vocab": "https://schema.org/",
+    "fp": "https://www.footprint.network/vocab/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "hydra": "http://www.w3.org/ns/hydra/core#",
+    "name": "schema:name",
+    "description": "schema:description",
+    "url": "schema:url",
+    "provider": "schema:provider",
+    "identifier": "schema:identifier",
+    "chain": {
+      "@id": "fp:chain",
+      "@type": "@id"
+    },
+    "walletAddress": "fp:walletAddress",
+    "tvlUsd": {
+      "@id": "fp:tvlUsd",
+      "@type": "xsd:double"
+    },
+    "floorPriceUsd": {
+      "@id": "fp:floorPriceUsd",
+      "@type": "xsd:double"
+    },
+    "holderCount": {
+      "@id": "fp:holderCount",
+      "@type": "xsd:integer"
+    },
+    "volume24hUsd": {
+      "@id": "fp:volume24hUsd",
+      "@type": "xsd:double"
+    },
+    "priceUsd": {
+      "@id": "fp:priceUsd",
+      "@type": "xsd:double"
+    },
+    "dau": {
+      "@id": "fp:dau",
+      "@type": "xsd:integer"
+    },
+    "mau": {
+      "@id": "fp:mau",
+      "@type": "xsd:integer"
+    },
+    "eventType": "fp:eventType",
+    "userId": "fp:userId",
+    "eventId": "fp:eventId",
+    "blockTimestamp": {
+      "@id": "fp:blockTimestamp",
+      "@type": "xsd:dateTime"
+    },
+    "NftCollection": "fp:NftCollection",
+    "DefiProtocol": "fp:DefiProtocol",
+    "BlockchainGame": "fp:BlockchainGame",
+    "FungibleToken": "fp:FungibleToken",
+    "WalletProfile": "fp:WalletProfile",
+    "UserEvent": "fp:UserEvent",
+    "EligibilityResult": "fp:EligibilityResult"
+  },
+  "@graph": [
+    {
+      "@type": "schema:WebAPI",
+      "@id": "https://api.footprint.network",
+      "name": "Footprint Analytics Data API",
+      "description": "Unified REST and SQL API providing blockchain analytics data across 30+ chains including NFT, DeFi, GameFi, token, and wallet metrics.",
+      "url": "https://www.footprint.network/",
+      "provider": {
+        "@type": "schema:Organization",
+        "name": "Footprint Analytics",
+        "url": "https://www.footprint.network/"
+      },
+      "documentation": "https://docs.footprint.network/docs/get-started",
+      "schema:availableChannel": {
+        "@type": "schema:ServiceChannel",
+        "schema:serviceUrl": "https://api.footprint.network"
+      }
+    },
+    {
+      "@type": "fp:NftCollection",
+      "@id": "fp:NftCollection",
+      "name": "NFT Collection",
+      "description": "A smart contract on a blockchain representing a collection of Non-Fungible Tokens with shared characteristics.",
+      "schema:additionalProperty": [
+        { "schema:name": "floorPriceUsd", "schema:description": "Lowest listed price in USD for any token in the collection" },
+        { "schema:name": "holderCount", "schema:description": "Number of unique wallet addresses holding at least one token" },
+        { "schema:name": "volume24hUsd", "schema:description": "Trading volume over the last 24 hours in USD" },
+        { "schema:name": "chain", "schema:description": "Blockchain network hosting the collection" }
+      ]
+    },
+    {
+      "@type": "fp:DefiProtocol",
+      "@id": "fp:DefiProtocol",
+      "name": "DeFi Protocol",
+      "description": "A set of smart contracts providing decentralized financial services such as trading, lending, or yield optimization.",
+      "schema:additionalProperty": [
+        { "schema:name": "tvlUsd", "schema:description": "Total Value Locked in USD across all protocol contracts" },
+        { "schema:name": "volume24hUsd", "schema:description": "24-hour trading or transaction volume in USD" },
+        { "schema:name": "chain", "schema:description": "Primary blockchain network where the protocol operates" }
+      ]
+    },
+    {
+      "@type": "fp:BlockchainGame",
+      "@id": "fp:BlockchainGame",
+      "name": "Blockchain Game",
+      "description": "A video game with on-chain asset ownership and economics, where player activity generates blockchain transactions.",
+      "schema:additionalProperty": [
+        { "schema:name": "dau", "schema:description": "Daily Active Wallets — unique addresses active in the past 24 hours" },
+        { "schema:name": "mau", "schema:description": "Monthly Active Wallets — unique addresses active in the past 30 days" },
+        { "schema:name": "chain", "schema:description": "Blockchain network the game is deployed on" }
+      ]
+    },
+    {
+      "@type": "fp:FungibleToken",
+      "@id": "fp:FungibleToken",
+      "name": "Fungible Token",
+      "description": "An interchangeable blockchain-based digital asset, typically implemented as ERC-20 on EVM chains.",
+      "schema:additionalProperty": [
+        { "schema:name": "priceUsd", "schema:description": "Current token price in USD" },
+        { "schema:name": "holderCount", "schema:description": "Number of unique wallet addresses holding the token" },
+        { "schema:name": "chain", "schema:description": "Blockchain network the token contract is deployed on" }
+      ]
+    },
+    {
+      "@type": "fp:WalletProfile",
+      "@id": "fp:WalletProfile",
+      "name": "Wallet Profile",
+      "description": "A comprehensive on-chain profile for a blockchain wallet address including token balances, NFT holdings, and activity history.",
+      "schema:additionalProperty": [
+        { "schema:name": "walletAddress", "schema:description": "The public blockchain address" },
+        { "schema:name": "chain", "schema:description": "Blockchain network the wallet profile is scoped to" }
+      ]
+    },
+    {
+      "@type": "fp:UserEvent",
+      "@id": "fp:UserEvent",
+      "name": "Growth Analytics User Event",
+      "description": "A behavioral event recorded via the Footprint Growth Analytics SDK, linking Web3 wallet activity to application-level user actions.",
+      "schema:additionalProperty": [
+        { "schema:name": "eventId", "schema:description": "Unique identifier for the event instance" },
+        { "schema:name": "eventType", "schema:description": "Standardized event category: install, sign_up, login, open_app, play_game, reward" },
+        { "schema:name": "userId", "schema:description": "Application-level user identifier" }
+      ]
+    },
+    {
+      "@type": "fp:EligibilityResult",
+      "@id": "fp:EligibilityResult",
+      "name": "Holder Eligibility Result",
+      "description": "The result of a check verifying whether a wallet address meets minimum NFT or token holding criteria for campaign or quest access.",
+      "schema:additionalProperty": [
+        { "schema:name": "walletAddress", "schema:description": "The wallet address that was checked" },
+        { "schema:name": "eligible", "schema:description": "Boolean indicating whether the wallet meets the criteria" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Track User Login Event",
+  "description": "Track a user login event via the Footprint Growth Analytics (FGA) API.",
+  "request": {
+    "method": "POST",
+    "url": "https://api.footprint.network/api/v1/events/track",
+    "headers": {
+      "X-API-KEY": "YOUR_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "event_id": "evt_login_user123_1700000000",
+      "event_type": "login",
+      "user_id": "user_123",
+      "event_name": "login",
+      "time": 1700000000
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "success": true,
+      "event_id": "evt_login_user123_1700000000",
+      "message": "Event tracked successfully"
+    }
+  }
+}

@@ -1,0 +1,158 @@
+name: Footprint Analytics Vocabulary
+description: >
+  Domain vocabulary for the Footprint Analytics blockchain data platform,
+  covering DeFi, NFT, GameFi, token analytics, and on-chain data concepts
+  used across the REST and SQL APIs.
+version: "1.0.0"
+url: https://raw.githubusercontent.com/api-evangelist/footprint/main/vocabulary/vocabulary.yml
+terms:
+  - term: TVL
+    label: Total Value Locked
+    definition: >
+      The aggregate value of all crypto assets deposited into a DeFi protocol's
+      smart contracts, expressed in USD. TVL is the primary metric for comparing
+      DeFi protocol size and adoption.
+    domain: DeFi
+    related: [protocol, liquidity_pool, yield]
+
+  - term: floor_price
+    label: NFT Floor Price
+    definition: >
+      The lowest listed asking price for any token in a specific NFT collection
+      at a given moment. Floor price serves as the minimum market value for
+      entry into a collection.
+    domain: NFT
+    related: [collection, market_cap, volume_24h]
+
+  - term: DAU
+    label: Daily Active Users / Wallets
+    definition: >
+      The number of unique wallet addresses that interacted with a blockchain
+      game or DeFi protocol in the past 24 hours. On-chain equivalent of
+      the traditional web DAU metric.
+    domain: GameFi, Analytics
+    related: [MAU, transaction_count, wallet_address]
+
+  - term: MAU
+    label: Monthly Active Users / Wallets
+    definition: >
+      The number of unique wallet addresses that interacted with a blockchain
+      game or DeFi protocol over the trailing 30-day period.
+    domain: GameFi, Analytics
+    related: [DAU, wallet_address]
+
+  - term: DEX
+    label: Decentralized Exchange
+    definition: >
+      A peer-to-peer cryptocurrency trading venue built on smart contracts,
+      enabling token swaps without a centralized intermediary. Examples include
+      Uniswap, PancakeSwap, and Curve.
+    domain: DeFi
+    related: [liquidity_pool, AMM, volume_24h]
+
+  - term: EoA
+    label: Externally Owned Account
+    definition: >
+      A blockchain account controlled by a private key (i.e., a regular user
+      wallet), as opposed to a smart contract account. EoAs initiate
+      transactions on EVM-compatible chains.
+    domain: Blockchain
+    related: [wallet_address, smart_contract, transaction]
+
+  - term: chain
+    label: Blockchain Network
+    definition: >
+      A specific distributed ledger network such as Ethereum, BNB Chain,
+      Polygon, Solana, or Sui. Footprint Analytics indexes 30+ chains.
+    domain: Blockchain
+    related: [block, transaction, EVM]
+
+  - term: EVM
+    label: Ethereum Virtual Machine
+    definition: >
+      The execution environment used by Ethereum and EVM-compatible chains
+      (BNB Chain, Polygon, Arbitrum, Optimism, Avalanche, etc.) to run
+      smart contract bytecode deterministically.
+    domain: Blockchain
+    related: [smart_contract, transaction, chain]
+
+  - term: NFT
+    label: Non-Fungible Token
+    definition: >
+      A unique digital asset recorded on a blockchain, representing ownership
+      of a specific item such as digital art, collectibles, or in-game items.
+      Each NFT has a distinct token ID within its collection contract.
+    domain: NFT
+    related: [collection, floor_price, ERC-721, ERC-1155]
+
+  - term: GameFi
+    label: Game Finance / Blockchain Gaming
+    definition: >
+      The intersection of blockchain technology and video gaming, where
+      in-game assets (tokens, NFTs) have real monetary value and players
+      can earn cryptocurrency through play.
+    domain: GameFi
+    related: [play_to_earn, in-game_token, NFT, DAU]
+
+  - term: wallet_address
+    label: Wallet Address
+    definition: >
+      A public cryptographic identifier representing a blockchain account.
+      On EVM chains, addresses are 42-character hexadecimal strings starting
+      with 0x. Used to identify asset owners and transaction senders.
+    domain: Blockchain
+    related: [EoA, transaction, token_holder]
+
+  - term: protocol
+    label: DeFi Protocol
+    definition: >
+      A set of smart contracts providing a specific financial service on-chain,
+      such as decentralized lending (Aave), trading (Uniswap), or yield
+      optimization (Yearn Finance).
+    domain: DeFi
+    related: [TVL, DEX, smart_contract, chain]
+
+  - term: block_timestamp
+    label: Block Timestamp
+    definition: >
+      The Unix timestamp recorded by the block producer when a block was
+      mined or finalized. Used extensively in Footprint SQL queries to
+      filter by time periods.
+    domain: Blockchain
+    related: [block, transaction, chain]
+
+  - term: token
+    label: Fungible Token
+    definition: >
+      A blockchain-based digital asset where each unit is interchangeable
+      with any other unit of the same token. On EVM chains, typically
+      implemented as ERC-20 contracts.
+    domain: Token
+    related: [token_address, holder_count, market_cap, price_usd]
+
+  - term: FGA
+    label: Footprint Growth Analytics
+    definition: >
+      Footprint Analytics' product for tracking Web3 user behavior and
+      growth metrics. Provides event tracking (login, play, reward),
+      user profiling, and wallet-to-user identity linking via SDK.
+    domain: Analytics
+    related: [event_type, user_id, wallet_address, DAU]
+
+  - term: eligibility
+    label: Holder Eligibility Check
+    definition: >
+      A verification operation that determines whether a wallet address
+      meets minimum holding criteria for a specific token or NFT collection.
+      Used for campaign gating, quest unlocking, and airdrop qualification.
+    domain: NFT, Token, Growthly
+    related: [wallet_address, NFT, token, holder_count]
+
+  - term: liquidity_pool
+    label: Liquidity Pool
+    definition: >
+      A smart contract holding reserves of two or more tokens that facilitate
+      automated market-making on DEX platforms. Liquidity providers deposit
+      tokens in exchange for trading fee rewards.
+    domain: DeFi
+    related: [DEX, TVL, AMM, volume_24h]

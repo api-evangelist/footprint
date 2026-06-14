@@ -1,0 +1,1300 @@
+openapi: 3.1.0
+info:
+  title: Footprint Analytics Data API
+  description: >
+    Footprint Analytics is a blockchain data analytics platform providing unified
+    REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token
+    analytics, GameFi economics, and on-chain activity across 30+ chains including
+    Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui.
+    The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections,
+    and 3,000+ blockchain games. Authentication is via API key passed as a query
+    parameter or request header.
+  version: 1.0.0
+  contact:
+    name: Footprint Analytics Support
+    url: https://www.footprint.network/
+  license:
+    name: Proprietary
+    url: https://www.footprint.network/
+servers:
+  - url: https://api.footprint.network
+    description: Footprint Analytics production API
+  - url: https://fp-api.readme.io
+    description: Footprint Analytics documentation API
+
+security:
+  - ApiKeyHeader: []
+  - ApiKeyQuery: []
+
+tags:
+  - name: Query
+    description: Execute SQL queries against blockchain datasets
+  - name: NFT
+    description: NFT collection and token market data
+  - name: DeFi
+    description: DeFi protocol metrics including TVL, DEX liquidity, and yield
+  - name: GameFi
+    description: Blockchain gaming economics and player analytics
+  - name: Token
+    description: Token price, supply, and holder analytics
+  - name: Wallet
+    description: Wallet profile, portfolio, and eligibility checks
+  - name: Chain
+    description: Chain-level block and transaction data
+  - name: Events
+    description: Track user events via Growth Analytics SDK
+
+paths:
+  /api/v1/query:
+    post:
+      operationId: executeQuery
+      summary: Execute a SQL query
+      description: >
+        Execute a SQL query against the Footprint Analytics blockchain dataset
+        using Trino/Presto-compatible SQL. Supports joins across on-chain tables
+        covering NFTs, DeFi, GameFi, tokens, wallets, and raw transactions across
+        30+ chains. Use LIMIT clauses and specific field selections to optimize
+        query performance.
+      tags:
+        - Query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+            examples:
+              nft_floor_price:
+                summary: Get NFT collection floor prices
+                value:
+                  query: >
+                    SELECT collection_name, floor_price, chain
+                    FROM nft_collection_daily_stats
+                    WHERE date_trunc('day', block_timestamp) = CAST('2024-01-01' AS datetime)
+                    LIMIT 10
+              defi_tvl:
+                summary: Get DeFi protocol TVL
+                value:
+                  query: >
+                    SELECT protocol_name, tvl_usd, chain
+                    FROM defi_protocol_daily_stats
+                    ORDER BY tvl_usd DESC
+                    LIMIT 20
+      responses:
+        '200':
+          description: Query executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+
+  /api/v1/nft/collections:
+    get:
+      operationId: listNftCollections
+      summary: List NFT collections
+      description: >
+        Returns a paginated list of NFT collections indexed by Footprint Analytics
+        across supported blockchains. Includes metadata such as floor price,
+        volume, and market cap.
+      tags:
+        - NFT
+      parameters:
+        - $ref: '#/components/parameters/Chain'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - name: sort_by
+          in: query
+          description: Field to sort results by
+          schema:
+            type: string
+            enum: [floor_price, volume_24h, market_cap, holder_count]
+            default: volume_24h
+      responses:
+        '200':
+          description: List of NFT collections
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NftCollectionListResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/nft/collections/{collection_address}:
+    get:
+      operationId: getNftCollection
+      summary: Get NFT collection details
+      description: >
+        Returns detailed metadata and market statistics for a specific NFT
+        collection identified by its contract address and chain.
+      tags:
+        - NFT
+      parameters:
+        - name: collection_address
+          in: path
+          required: true
+          description: Contract address of the NFT collection
+          schema:
+            type: string
+            example: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d"
+        - $ref: '#/components/parameters/Chain'
+      responses:
+        '200':
+          description: NFT collection details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NftCollection'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/defi/protocols:
+    get:
+      operationId: listDefiProtocols
+      summary: List DeFi protocols
+      description: >
+        Returns a paginated list of DeFi protocols tracked by Footprint Analytics,
+        including TVL, volume, and yield metrics across 30+ chains.
+      tags:
+        - DeFi
+      parameters:
+        - $ref: '#/components/parameters/Chain'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - name: category
+          in: query
+          description: DeFi protocol category filter
+          schema:
+            type: string
+            enum: [dex, lending, yield, bridge, liquid_staking, derivatives]
+      responses:
+        '200':
+          description: List of DeFi protocols
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefiProtocolListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/defi/protocols/{protocol_id}/tvl:
+    get:
+      operationId: getProtocolTvl
+      summary: Get protocol TVL history
+      description: >
+        Returns historical Total Value Locked (TVL) data for a specific DeFi
+        protocol. Supports daily granularity across a date range.
+      tags:
+        - DeFi
+      parameters:
+        - name: protocol_id
+          in: path
+          required: true
+          description: Unique identifier of the DeFi protocol
+          schema:
+            type: string
+            example: "uniswap-v3"
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+        - $ref: '#/components/parameters/Granularity'
+      responses:
+        '200':
+          description: Protocol TVL history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TvlHistoryResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/gamefi/games:
+    get:
+      operationId: listGamefiGames
+      summary: List GameFi games
+      description: >
+        Returns a list of blockchain games tracked by Footprint Analytics with
+        player counts, transaction volumes, and token economic metrics.
+      tags:
+        - GameFi
+      parameters:
+        - $ref: '#/components/parameters/Chain'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - name: genre
+          in: query
+          description: Game genre filter
+          schema:
+            type: string
+            example: "RPG"
+      responses:
+        '200':
+          description: List of GameFi games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/gamefi/games/{game_id}/metrics:
+    get:
+      operationId: getGameMetrics
+      summary: Get game economic metrics
+      description: >
+        Returns on-chain economic metrics for a specific blockchain game including
+        daily active wallets, transaction volume, token price, and player
+        retention statistics.
+      tags:
+        - GameFi
+      parameters:
+        - name: game_id
+          in: path
+          required: true
+          description: Unique identifier of the blockchain game
+          schema:
+            type: string
+        - $ref: '#/components/parameters/StartDate'
+        - $ref: '#/components/parameters/EndDate'
+      responses:
+        '200':
+          description: Game metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameMetricsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/tokens/{token_address}:
+    get:
+      operationId: getTokenInfo
+      summary: Get token information
+      description: >
+        Returns token metadata, price, market cap, supply, and holder analytics
+        for a specific token contract address on the specified chain.
+      tags:
+        - Token
+      parameters:
+        - name: token_address
+          in: path
+          required: true
+          description: Contract address of the token
+          schema:
+            type: string
+            example: "0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2"
+        - $ref: '#/components/parameters/Chain'
+      responses:
+        '200':
+          description: Token information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenInfo'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/tokens/{token_address}/holders:
+    get:
+      operationId: getTokenHolders
+      summary: Get token holders
+      description: >
+        Returns a ranked list of token holders with wallet addresses and
+        balances for the specified token contract. Useful for verifying
+        holder eligibility in campaigns and quests.
+      tags:
+        - Token
+      parameters:
+        - name: token_address
+          in: path
+          required: true
+          description: Contract address of the token
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Chain'
+        - $ref: '#/components/parameters/Limit'
+        - $ref: '#/components/parameters/Offset'
+        - name: min_balance
+          in: query
+          description: Minimum token balance filter
+          schema:
+            type: number
+            format: double
+      responses:
+        '200':
+          description: Token holder list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenHolderListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/wallet/{wallet_address}/profile:
+    get:
+      operationId: getWalletProfile
+      summary: Get wallet profile
+      description: >
+        Returns a comprehensive on-chain profile for a wallet address including
+        token balances, NFT holdings, DeFi positions, transaction history
+        summary, and cross-chain activity.
+      tags:
+        - Wallet
+      parameters:
+        - name: wallet_address
+          in: path
+          required: true
+          description: Wallet address to query
+          schema:
+            type: string
+            example: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+        - $ref: '#/components/parameters/Chain'
+      responses:
+        '200':
+          description: Wallet profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletProfile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /api/v1/wallet/{wallet_address}/eligibility/nft:
+    get:
+      operationId: checkNftHolderEligibility
+      summary: Verify NFT holder eligibility
+      description: >
+        Checks whether a given wallet address currently holds tokens from a
+        specific NFT collection. Used for verifying NFT-gated campaign or
+        quest eligibility.
+      tags:
+        - Wallet
+        - NFT
+      parameters:
+        - name: wallet_address
+          in: path
+          required: true
+          description: Wallet address to check
+          schema:
+            type: string
+        - name: collection_address
+          in: query
+          required: true
+          description: NFT collection contract address to check holding in
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Chain'
+        - name: min_count
+          in: query
+          description: Minimum number of NFTs the wallet must hold
+          schema:
+            type: integer
+            default: 1
+      responses:
+        '200':
+          description: NFT holder eligibility result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/wallet/{wallet_address}/eligibility/token:
+    get:
+      operationId: checkTokenHolderEligibility
+      summary: Verify token holder eligibility
+      description: >
+        Checks whether a given wallet address holds at least a minimum balance
+        of a specific token. Used for verifying token-gated campaign or quest
+        eligibility.
+      tags:
+        - Wallet
+        - Token
+      parameters:
+        - name: wallet_address
+          in: path
+          required: true
+          description: Wallet address to check
+          schema:
+            type: string
+        - name: token_address
+          in: query
+          required: true
+          description: Token contract address to check balance for
+          schema:
+            type: string
+        - $ref: '#/components/parameters/Chain'
+        - name: min_balance
+          in: query
+          description: Minimum token balance required for eligibility
+          schema:
+            type: number
+            format: double
+            default: 0
+      responses:
+        '200':
+          description: Token holder eligibility result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/chain/{chain}/blocks:
+    get:
+      operationId: getChainBlocks
+      summary: Get chain block data
+      description: >
+        Returns recent block data for the specified blockchain including block
+        height, timestamp, transaction count, and gas metrics.
+      tags:
+        - Chain
+      parameters:
+        - name: chain
+          in: path
+          required: true
+          description: Blockchain network identifier
+          schema:
+            $ref: '#/components/schemas/ChainEnum'
+        - $ref: '#/components/parameters/Limit'
+        - name: from_block
+          in: query
+          description: Start block number
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Block data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/events/track:
+    post:
+      operationId: trackEvent
+      summary: Track a user event
+      description: >
+        Record a user behavioral event via the Footprint Growth Analytics (FGA)
+        platform. Supports standard event types (install, sign_up, login,
+        open_app, play_game, reward) and custom event properties. Events appear
+        in dashboards within approximately one minute of ingestion.
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackEventRequest'
+            examples:
+              login_event:
+                summary: Track a login event
+                value:
+                  event_id: "evt_abc123"
+                  event_type: "login"
+                  user_id: "user_456"
+                  event_name: "login"
+                  time: 1700000000
+              game_event:
+                summary: Track a play_game event with properties
+                value:
+                  event_id: "evt_game789"
+                  event_type: "play_game"
+                  user_id: "user_456"
+                  event_name: "dungeon_complete"
+                  event_properties:
+                    level: 5
+                    duration_seconds: 120
+      responses:
+        '200':
+          description: Event tracked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackEventResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/users/{user_id}:
+    put:
+      operationId: setUserProperties
+      summary: Set user properties
+      description: >
+        Create or update a user profile in the Footprint Growth Analytics
+        platform with identity attributes and custom properties.
+      tags:
+        - Events
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPropertiesRequest'
+      responses:
+        '200':
+          description: User properties updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /api/v1/users/{user_id}/accounts:
+    post:
+      operationId: linkWalletAccount
+      summary: Link wallet to user account
+      description: >
+        Associate a blockchain wallet address with a user account to enable
+        cross-chain and cross-identity analytics in the Footprint Growth
+        Analytics platform.
+      tags:
+        - Events
+        - Wallet
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          description: Unique identifier of the user
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkWalletRequest'
+            examples:
+              link_metamask:
+                summary: Link a MetaMask wallet
+                value:
+                  wallet_address: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+                  wallet_type: "EoA"
+                  wallet_provider: "metamask"
+      responses:
+        '200':
+          description: Wallet linked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: Footprint Analytics API key passed as a request header
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: apiKey
+      description: Footprint Analytics API key passed as a query parameter
+
+  parameters:
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of results to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 20
+    Offset:
+      name: offset
+      in: query
+      description: Number of results to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    StartDate:
+      name: start_date
+      in: query
+      description: Start date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: "2024-01-01"
+    EndDate:
+      name: end_date
+      in: query
+      description: End date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: "2024-12-31"
+    Granularity:
+      name: granularity
+      in: query
+      description: Time series granularity
+      schema:
+        type: string
+        enum: [hour, day, week, month]
+        default: day
+
+  schemas:
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+        - ethereum
+        - bnb
+        - polygon
+        - arbitrum
+        - optimism
+        - avalanche
+        - fantom
+        - solana
+        - bitcoin
+        - sui
+        - starknet
+        - zksync
+        - celo
+        - cronos
+        - ronin
+        - moonbeam
+        - moonriver
+        - base
+        - linea
+        - scroll
+      example: ethereum
+
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: >
+            SQL query string using Trino/Presto-compatible syntax.
+            Tables cover nft, defi, gamefi, token, wallet, and raw
+            chain data. Use LIMIT and specific field selections for
+            best performance.
+          example: "SELECT * FROM nft_collection_daily_stats LIMIT 10"
+        parameters:
+          type: object
+          description: Named parameters to bind into the query
+          additionalProperties:
+            oneOf:
+              - type: string
+              - type: number
+              - type: boolean
+
+    QueryResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: Result rows as objects
+          items:
+            type: object
+            additionalProperties: true
+        columns:
+          type: array
+          description: Column metadata for the result set
+          items:
+            $ref: '#/components/schemas/ColumnMeta'
+        row_count:
+          type: integer
+          description: Total number of rows returned
+        execution_time_ms:
+          type: integer
+          description: Query execution duration in milliseconds
+
+    ColumnMeta:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Column name
+        type:
+          type: string
+          description: Data type of the column (e.g., varchar, bigint, double, timestamp)
+
+    NftCollectionListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NftCollection'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    NftCollection:
+      type: object
+      properties:
+        collection_address:
+          type: string
+          description: Contract address of the NFT collection
+        collection_name:
+          type: string
+          description: Display name of the NFT collection
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        floor_price_usd:
+          type: number
+          format: double
+          description: Current floor price in USD
+        floor_price_native:
+          type: number
+          format: double
+          description: Current floor price in the chain's native token
+        volume_24h_usd:
+          type: number
+          format: double
+          description: 24-hour trading volume in USD
+        market_cap_usd:
+          type: number
+          format: double
+          description: Market capitalization in USD
+        holder_count:
+          type: integer
+          description: Number of unique holders
+        total_supply:
+          type: integer
+          description: Total number of tokens in the collection
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent data update
+
+    DefiProtocolListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefiProtocol'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    DefiProtocol:
+      type: object
+      properties:
+        protocol_id:
+          type: string
+          description: Unique identifier for the protocol
+        protocol_name:
+          type: string
+          description: Display name of the DeFi protocol
+        category:
+          type: string
+          description: Protocol category (dex, lending, yield, bridge, etc.)
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        tvl_usd:
+          type: number
+          format: double
+          description: Total Value Locked in USD
+        volume_24h_usd:
+          type: number
+          format: double
+          description: 24-hour trading volume in USD
+        apy:
+          type: number
+          format: double
+          description: Annual percentage yield (where applicable)
+        updated_at:
+          type: string
+          format: date-time
+
+    TvlHistoryResponse:
+      type: object
+      properties:
+        protocol_id:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TvlDataPoint'
+
+    TvlDataPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the TVL snapshot
+        tvl_usd:
+          type: number
+          format: double
+          description: Total Value Locked in USD at that date
+
+    GameListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    Game:
+      type: object
+      properties:
+        game_id:
+          type: string
+          description: Unique identifier for the game
+        game_name:
+          type: string
+          description: Display name of the game
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        genre:
+          type: string
+          description: Game genre (RPG, Strategy, Sports, etc.)
+        dau:
+          type: integer
+          description: Daily active wallets (last 24 hours)
+        mau:
+          type: integer
+          description: Monthly active wallets (last 30 days)
+        token_symbol:
+          type: string
+          description: Primary in-game token symbol
+        updated_at:
+          type: string
+          format: date-time
+
+    GameMetricsResponse:
+      type: object
+      properties:
+        game_id:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameMetricsDataPoint'
+
+    GameMetricsDataPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        dau:
+          type: integer
+          description: Daily active wallets
+        transactions:
+          type: integer
+          description: Number of on-chain transactions
+        volume_usd:
+          type: number
+          format: double
+          description: Transaction volume in USD
+        token_price_usd:
+          type: number
+          format: double
+          description: In-game token price in USD
+
+    TokenInfo:
+      type: object
+      properties:
+        token_address:
+          type: string
+          description: Contract address of the token
+        token_symbol:
+          type: string
+          description: Token ticker symbol
+        token_name:
+          type: string
+          description: Full name of the token
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        price_usd:
+          type: number
+          format: double
+          description: Current price in USD
+        market_cap_usd:
+          type: number
+          format: double
+          description: Market capitalization in USD
+        total_supply:
+          type: number
+          format: double
+          description: Total token supply
+        circulating_supply:
+          type: number
+          format: double
+          description: Circulating token supply
+        holder_count:
+          type: integer
+          description: Number of unique token holders
+        updated_at:
+          type: string
+          format: date-time
+
+    TokenHolderListResponse:
+      type: object
+      properties:
+        token_address:
+          type: string
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenHolder'
+        total:
+          type: integer
+
+    TokenHolder:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: Address of the token holder
+        balance:
+          type: number
+          format: double
+          description: Token balance held
+        balance_usd:
+          type: number
+          format: double
+          description: Token balance value in USD
+        rank:
+          type: integer
+          description: Rank by balance (1 = largest holder)
+        percentage:
+          type: number
+          format: double
+          description: Percentage of total supply held
+
+    WalletProfile:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: The queried wallet address
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        native_balance:
+          type: number
+          format: double
+          description: Balance in chain native token
+        native_balance_usd:
+          type: number
+          format: double
+          description: Native balance value in USD
+        token_holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenHolder'
+        nft_holdings_count:
+          type: integer
+          description: Total number of NFTs held
+        defi_positions_count:
+          type: integer
+          description: Number of active DeFi positions
+        transaction_count:
+          type: integer
+          description: Total historical transaction count
+        first_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's first transaction
+        last_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's most recent transaction
+
+    EligibilityResult:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+        eligible:
+          type: boolean
+          description: Whether the wallet meets the eligibility criteria
+        current_balance:
+          type: number
+          format: double
+          description: Current balance or count for the checked asset
+        required_balance:
+          type: number
+          format: double
+          description: Minimum balance required for eligibility
+        checked_at:
+          type: string
+          format: date-time
+
+    BlockListResponse:
+      type: object
+      properties:
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+
+    Block:
+      type: object
+      properties:
+        block_number:
+          type: integer
+          format: int64
+          description: Block height
+        block_hash:
+          type: string
+          description: Block hash
+        block_timestamp:
+          type: string
+          format: date-time
+          description: Block production timestamp
+        transaction_count:
+          type: integer
+          description: Number of transactions in the block
+        gas_used:
+          type: integer
+          format: int64
+          description: Total gas consumed by the block (EVM chains only)
+        gas_limit:
+          type: integer
+          format: int64
+          description: Maximum gas allowed for the block (EVM chains only)
+
+    TrackEventRequest:
+      type: object
+      required:
+        - event_id
+        - event_type
+        - user_id
+        - event_name
+      properties:
+        event_id:
+          type: string
+          description: Unique identifier for this event instance
+          example: "evt_abc123"
+        event_type:
+          type: string
+          description: >
+            Standardized event type category. Standard values are:
+            install, sign_up, login, open_app, play_game, reward.
+            Custom types are also supported.
+          example: "login"
+        user_id:
+          type: string
+          description: Identifier of the user who performed the event
+          example: "user_456"
+        event_name:
+          type: string
+          description: Human-readable label for the event
+          example: "login"
+        event_properties:
+          type: object
+          description: >
+            Custom key-value metadata associated with the event.
+            Stored in the extra_data field for downstream analysis.
+          additionalProperties: true
+        time:
+          type: integer
+          format: int64
+          description: Unix timestamp of the event (defaults to server time if omitted)
+          example: 1700000000
+
+    TrackEventResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        event_id:
+          type: string
+          description: The event_id that was recorded
+        message:
+          type: string
+
+    UserPropertiesRequest:
+      type: object
+      required:
+        - user_id
+        - user_name
+        - sign_up_at
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier of the user
+          example: "user_456"
+        user_name:
+          type: string
+          description: Display name of the user
+          example: "Alice"
+        sign_up_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of when the user signed up
+          example: 1699000000
+        user_properties:
+          type: object
+          description: >
+            Additional user attributes. Supported keys include:
+            sign_up_device, account_type, email, country, twitter,
+            discord, ip.
+          properties:
+            sign_up_device:
+              type: string
+              example: "web"
+            account_type:
+              type: string
+              example: "web3"
+            email:
+              type: string
+              format: email
+            country:
+              type: string
+              description: ISO 3166-1 alpha-2 country code
+              example: "US"
+            twitter:
+              type: string
+              description: Twitter/X handle
+            discord:
+              type: string
+              description: Discord username
+            ip:
+              type: string
+              description: IP address of the user
+              example: "192.168.1.1"
+
+    LinkWalletRequest:
+      type: object
+      required:
+        - wallet_address
+      properties:
+        wallet_address:
+          type: string
+          description: Blockchain wallet address to link to the user
+          example: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+        wallet_type:
+          type: string
+          description: Type of wallet account (EoA = Externally Owned Account)
+          enum: [EoA, contract]
+          default: EoA
+        wallet_provider:
+          type: string
+          description: Wallet provider or connector used
+          example: "metamask"
+          default: "metamask"
+
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters or malformed query
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait before retrying
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
