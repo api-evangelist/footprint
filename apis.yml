@@ -7,7 +7,7 @@ description: >
   The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections,
   and 3,000+ blockchain games, offering both no-code dashboards and programmatic
   API access for developers building Web3 data applications.
-image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
 url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/apis.yml
 created: "2026-06-14"
 modified: "2026-06-14"
@@ -29,7 +29,7 @@ apis:
       data, pre-computed metrics, cross-chain aggregates, floor prices, TVL,
       DEX pool liquidity, wallet profiles, and game economics. Authentication
       via API key. Both free and paid enterprise tiers available.
-    image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     humanURL: https://www.footprint.network/
     baseURL: https://api.footprint.network
     tags:
