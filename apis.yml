@@ -56,6 +56,10 @@ apis:
         url: https://www.footprint.network/
         email: ""
 common:
+  - type: DomainSecurity
+    url: security/footprint-domain-security.yml
+  - type: Authentication
+    url: authentication/footprint-authentication.yml
   - type: Website
     url: https://www.footprint.network/
   - type: Documentation
