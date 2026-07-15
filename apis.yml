@@ -56,6 +56,8 @@ apis:
         url: https://www.footprint.network/
         email: ""
 common:
+  - type: AgenticAccess
+    url: agentic-access/footprint-agentic-access.yml
   - type: DomainSecurity
     url: security/footprint-domain-security.yml
   - type: Authentication
