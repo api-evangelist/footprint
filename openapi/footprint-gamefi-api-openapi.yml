@@ -1,0 +1,256 @@
+openapi: 3.1.0
+info:
+  title: Footprint Analytics Data Chain GameFi API
+  description: 'Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Footprint Analytics Support
+    url: https://www.footprint.network/
+  license:
+    name: Proprietary
+    url: https://www.footprint.network/
+servers:
+- url: https://api.footprint.network
+  description: Footprint Analytics production API
+- url: https://fp-api.readme.io
+  description: Footprint Analytics documentation API
+security:
+- ApiKeyHeader: []
+- ApiKeyQuery: []
+tags:
+- name: GameFi
+  description: Blockchain gaming economics and player analytics
+paths:
+  /api/v1/gamefi/games:
+    get:
+      operationId: listGamefiGames
+      summary: List GameFi games
+      description: 'Returns a list of blockchain games tracked by Footprint Analytics with player counts, transaction volumes, and token economic metrics.
+
+        '
+      tags:
+      - GameFi
+      parameters:
+      - $ref: '#/components/parameters/Chain'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/Offset'
+      - name: genre
+        in: query
+        description: Game genre filter
+        schema:
+          type: string
+          example: RPG
+      responses:
+        '200':
+          description: List of GameFi games
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/gamefi/games/{game_id}/metrics:
+    get:
+      operationId: getGameMetrics
+      summary: Get game economic metrics
+      description: 'Returns on-chain economic metrics for a specific blockchain game including daily active wallets, transaction volume, token price, and player retention statistics.
+
+        '
+      tags:
+      - GameFi
+      parameters:
+      - name: game_id
+        in: path
+        required: true
+        description: Unique identifier of the blockchain game
+        schema:
+          type: string
+      - $ref: '#/components/parameters/StartDate'
+      - $ref: '#/components/parameters/EndDate'
+      responses:
+        '200':
+          description: Game metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameMetricsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
+    StartDate:
+      name: start_date
+      in: query
+      description: Start date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: '2024-01-01'
+    Offset:
+      name: offset
+      in: query
+      description: Number of results to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    EndDate:
+      name: end_date
+      in: query
+      description: End date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: '2024-12-31'
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of results to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 20
+  schemas:
+    GameListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+    GameMetricsDataPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        dau:
+          type: integer
+          description: Daily active wallets
+        transactions:
+          type: integer
+          description: Number of on-chain transactions
+        volume_usd:
+          type: number
+          format: double
+          description: Transaction volume in USD
+        token_price_usd:
+          type: number
+          format: double
+          description: In-game token price in USD
+    Game:
+      type: object
+      properties:
+        game_id:
+          type: string
+          description: Unique identifier for the game
+        game_name:
+          type: string
+          description: Display name of the game
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        genre:
+          type: string
+          description: Game genre (RPG, Strategy, Sports, etc.)
+        dau:
+          type: integer
+          description: Daily active wallets (last 24 hours)
+        mau:
+          type: integer
+          description: Monthly active wallets (last 30 days)
+        token_symbol:
+          type: string
+          description: Primary in-game token symbol
+        updated_at:
+          type: string
+          format: date-time
+    GameMetricsResponse:
+      type: object
+      properties:
+        game_id:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameMetricsDataPoint'
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+      - ethereum
+      - bnb
+      - polygon
+      - arbitrum
+      - optimism
+      - avalanche
+      - fantom
+      - solana
+      - bitcoin
+      - sui
+      - starknet
+      - zksync
+      - celo
+      - cronos
+      - ronin
+      - moonbeam
+      - moonriver
+      - base
+      - linea
+      - scroll
+      example: ethereum
+  responses:
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: Footprint Analytics API key passed as a request header
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: apiKey
+      description: Footprint Analytics API key passed as a query parameter

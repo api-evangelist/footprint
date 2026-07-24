@@ -1,0 +1,161 @@
+openapi: 3.1.0
+info:
+  title: Footprint Analytics Data Chain API
+  description: 'Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Footprint Analytics Support
+    url: https://www.footprint.network/
+  license:
+    name: Proprietary
+    url: https://www.footprint.network/
+servers:
+- url: https://api.footprint.network
+  description: Footprint Analytics production API
+- url: https://fp-api.readme.io
+  description: Footprint Analytics documentation API
+security:
+- ApiKeyHeader: []
+- ApiKeyQuery: []
+tags:
+- name: Chain
+  description: Chain-level block and transaction data
+paths:
+  /api/v1/chain/{chain}/blocks:
+    get:
+      operationId: getChainBlocks
+      summary: Get chain block data
+      description: 'Returns recent block data for the specified blockchain including block height, timestamp, transaction count, and gas metrics.
+
+        '
+      tags:
+      - Chain
+      parameters:
+      - name: chain
+        in: path
+        required: true
+        description: Blockchain network identifier
+        schema:
+          $ref: '#/components/schemas/ChainEnum'
+      - $ref: '#/components/parameters/Limit'
+      - name: from_block
+        in: query
+        description: Start block number
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Block data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BlockListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    Block:
+      type: object
+      properties:
+        block_number:
+          type: integer
+          format: int64
+          description: Block height
+        block_hash:
+          type: string
+          description: Block hash
+        block_timestamp:
+          type: string
+          format: date-time
+          description: Block production timestamp
+        transaction_count:
+          type: integer
+          description: Number of transactions in the block
+        gas_used:
+          type: integer
+          format: int64
+          description: Total gas consumed by the block (EVM chains only)
+        gas_limit:
+          type: integer
+          format: int64
+          description: Maximum gas allowed for the block (EVM chains only)
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    BlockListResponse:
+      type: object
+      properties:
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+      - ethereum
+      - bnb
+      - polygon
+      - arbitrum
+      - optimism
+      - avalanche
+      - fantom
+      - solana
+      - bitcoin
+      - sui
+      - starknet
+      - zksync
+      - celo
+      - cronos
+      - ronin
+      - moonbeam
+      - moonriver
+      - base
+      - linea
+      - scroll
+      example: ethereum
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of results to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 20
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: Footprint Analytics API key passed as a request header
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: apiKey
+      description: Footprint Analytics API key passed as a query parameter

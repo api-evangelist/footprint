@@ -1,0 +1,308 @@
+openapi: 3.1.0
+info:
+  title: Footprint Analytics Data Chain Events API
+  description: 'Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Footprint Analytics Support
+    url: https://www.footprint.network/
+  license:
+    name: Proprietary
+    url: https://www.footprint.network/
+servers:
+- url: https://api.footprint.network
+  description: Footprint Analytics production API
+- url: https://fp-api.readme.io
+  description: Footprint Analytics documentation API
+security:
+- ApiKeyHeader: []
+- ApiKeyQuery: []
+tags:
+- name: Events
+  description: Track user events via Growth Analytics SDK
+paths:
+  /api/v1/events/track:
+    post:
+      operationId: trackEvent
+      summary: Track a user event
+      description: 'Record a user behavioral event via the Footprint Growth Analytics (FGA) platform. Supports standard event types (install, sign_up, login, open_app, play_game, reward) and custom event properties. Events appear in dashboards within approximately one minute of ingestion.
+
+        '
+      tags:
+      - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrackEventRequest'
+            examples:
+              login_event:
+                summary: Track a login event
+                value:
+                  event_id: evt_abc123
+                  event_type: login
+                  user_id: user_456
+                  event_name: login
+                  time: 1700000000
+              game_event:
+                summary: Track a play_game event with properties
+                value:
+                  event_id: evt_game789
+                  event_type: play_game
+                  user_id: user_456
+                  event_name: dungeon_complete
+                  event_properties:
+                    level: 5
+                    duration_seconds: 120
+      responses:
+        '200':
+          description: Event tracked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackEventResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/users/{user_id}:
+    put:
+      operationId: setUserProperties
+      summary: Set user properties
+      description: 'Create or update a user profile in the Footprint Growth Analytics platform with identity attributes and custom properties.
+
+        '
+      tags:
+      - Events
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: Unique identifier of the user
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserPropertiesRequest'
+      responses:
+        '200':
+          description: User properties updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/users/{user_id}/accounts:
+    post:
+      operationId: linkWalletAccount
+      summary: Link wallet to user account
+      description: 'Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.
+
+        '
+      tags:
+      - Events
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: Unique identifier of the user
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkWalletRequest'
+            examples:
+              link_metamask:
+                summary: Link a MetaMask wallet
+                value:
+                  wallet_address: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+                  wallet_type: EoA
+                  wallet_provider: metamask
+      responses:
+        '200':
+          description: Wallet linked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    LinkWalletRequest:
+      type: object
+      required:
+      - wallet_address
+      properties:
+        wallet_address:
+          type: string
+          description: Blockchain wallet address to link to the user
+          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+        wallet_type:
+          type: string
+          description: Type of wallet account (EoA = Externally Owned Account)
+          enum:
+          - EoA
+          - contract
+          default: EoA
+        wallet_provider:
+          type: string
+          description: Wallet provider or connector used
+          example: metamask
+          default: metamask
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    TrackEventRequest:
+      type: object
+      required:
+      - event_id
+      - event_type
+      - user_id
+      - event_name
+      properties:
+        event_id:
+          type: string
+          description: Unique identifier for this event instance
+          example: evt_abc123
+        event_type:
+          type: string
+          description: 'Standardized event type category. Standard values are: install, sign_up, login, open_app, play_game, reward. Custom types are also supported.
+
+            '
+          example: login
+        user_id:
+          type: string
+          description: Identifier of the user who performed the event
+          example: user_456
+        event_name:
+          type: string
+          description: Human-readable label for the event
+          example: login
+        event_properties:
+          type: object
+          description: 'Custom key-value metadata associated with the event. Stored in the extra_data field for downstream analysis.
+
+            '
+          additionalProperties: true
+        time:
+          type: integer
+          format: int64
+          description: Unix timestamp of the event (defaults to server time if omitted)
+          example: 1700000000
+    TrackEventResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        event_id:
+          type: string
+          description: The event_id that was recorded
+        message:
+          type: string
+    UserPropertiesRequest:
+      type: object
+      required:
+      - user_id
+      - user_name
+      - sign_up_at
+      properties:
+        user_id:
+          type: string
+          description: Unique identifier of the user
+          example: user_456
+        user_name:
+          type: string
+          description: Display name of the user
+          example: Alice
+        sign_up_at:
+          type: integer
+          format: int64
+          description: Unix timestamp of when the user signed up
+          example: 1699000000
+        user_properties:
+          type: object
+          description: 'Additional user attributes. Supported keys include: sign_up_device, account_type, email, country, twitter, discord, ip.
+
+            '
+          properties:
+            sign_up_device:
+              type: string
+              example: web
+            account_type:
+              type: string
+              example: web3
+            email:
+              type: string
+              format: email
+            country:
+              type: string
+              description: ISO 3166-1 alpha-2 country code
+              example: US
+            twitter:
+              type: string
+              description: Twitter/X handle
+            discord:
+              type: string
+              description: Discord username
+            ip:
+              type: string
+              description: IP address of the user
+              example: 192.168.1.1
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Invalid request parameters or malformed query
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: Footprint Analytics API key passed as a request header
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: apiKey
+      description: Footprint Analytics API key passed as a query parameter

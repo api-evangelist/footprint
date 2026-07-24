@@ -1,0 +1,174 @@
+openapi: 3.1.0
+info:
+  title: Footprint Analytics Data Chain Query API
+  description: 'Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Footprint Analytics Support
+    url: https://www.footprint.network/
+  license:
+    name: Proprietary
+    url: https://www.footprint.network/
+servers:
+- url: https://api.footprint.network
+  description: Footprint Analytics production API
+- url: https://fp-api.readme.io
+  description: Footprint Analytics documentation API
+security:
+- ApiKeyHeader: []
+- ApiKeyQuery: []
+tags:
+- name: Query
+  description: Execute SQL queries against blockchain datasets
+paths:
+  /api/v1/query:
+    post:
+      operationId: executeQuery
+      summary: Execute a SQL query
+      description: 'Execute a SQL query against the Footprint Analytics blockchain dataset using Trino/Presto-compatible SQL. Supports joins across on-chain tables covering NFTs, DeFi, GameFi, tokens, wallets, and raw transactions across 30+ chains. Use LIMIT clauses and specific field selections to optimize query performance.
+
+        '
+      tags:
+      - Query
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+            examples:
+              nft_floor_price:
+                summary: Get NFT collection floor prices
+                value:
+                  query: 'SELECT collection_name, floor_price, chain FROM nft_collection_daily_stats WHERE date_trunc(''day'', block_timestamp) = CAST(''2024-01-01'' AS datetime) LIMIT 10
+
+                    '
+              defi_tvl:
+                summary: Get DeFi protocol TVL
+                value:
+                  query: 'SELECT protocol_name, tvl_usd, chain FROM defi_protocol_daily_stats ORDER BY tvl_usd DESC LIMIT 20
+
+                    '
+      responses:
+        '200':
+          description: Query executed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QueryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+components:
+  responses:
+    InternalError:
+      description: Internal server error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimited:
+      description: Rate limit exceeded
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+          description: Seconds to wait before retrying
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Invalid request parameters or malformed query
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ColumnMeta:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Column name
+        type:
+          type: string
+          description: Data type of the column (e.g., varchar, bigint, double, timestamp)
+    QueryResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          description: Result rows as objects
+          items:
+            type: object
+            additionalProperties: true
+        columns:
+          type: array
+          description: Column metadata for the result set
+          items:
+            $ref: '#/components/schemas/ColumnMeta'
+        row_count:
+          type: integer
+          description: Total number of rows returned
+        execution_time_ms:
+          type: integer
+          description: Query execution duration in milliseconds
+    QueryRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: 'SQL query string using Trino/Presto-compatible syntax. Tables cover nft, defi, gamefi, token, wallet, and raw chain data. Use LIMIT and specific field selections for best performance.
+
+            '
+          example: SELECT * FROM nft_collection_daily_stats LIMIT 10
+        parameters:
+          type: object
+          description: Named parameters to bind into the query
+          additionalProperties:
+            oneOf:
+            - type: string
+            - type: number
+            - type: boolean
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: Footprint Analytics API key passed as a request header
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: apiKey
+      description: Footprint Analytics API key passed as a query parameter

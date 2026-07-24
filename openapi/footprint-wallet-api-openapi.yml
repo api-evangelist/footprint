@@ -1,0 +1,355 @@
+openapi: 3.1.0
+info:
+  title: Footprint Analytics Data Chain Wallet API
+  description: 'Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
+
+    '
+  version: 1.0.0
+  contact:
+    name: Footprint Analytics Support
+    url: https://www.footprint.network/
+  license:
+    name: Proprietary
+    url: https://www.footprint.network/
+servers:
+- url: https://api.footprint.network
+  description: Footprint Analytics production API
+- url: https://fp-api.readme.io
+  description: Footprint Analytics documentation API
+security:
+- ApiKeyHeader: []
+- ApiKeyQuery: []
+tags:
+- name: Wallet
+  description: Wallet profile, portfolio, and eligibility checks
+paths:
+  /api/v1/wallet/{wallet_address}/profile:
+    get:
+      operationId: getWalletProfile
+      summary: Get wallet profile
+      description: 'Returns a comprehensive on-chain profile for a wallet address including token balances, NFT holdings, DeFi positions, transaction history summary, and cross-chain activity.
+
+        '
+      tags:
+      - Wallet
+      parameters:
+      - name: wallet_address
+        in: path
+        required: true
+        description: Wallet address to query
+        schema:
+          type: string
+          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+      - $ref: '#/components/parameters/Chain'
+      responses:
+        '200':
+          description: Wallet profile
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WalletProfile'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /api/v1/wallet/{wallet_address}/eligibility/nft:
+    get:
+      operationId: checkNftHolderEligibility
+      summary: Verify NFT holder eligibility
+      description: 'Checks whether a given wallet address currently holds tokens from a specific NFT collection. Used for verifying NFT-gated campaign or quest eligibility.
+
+        '
+      tags:
+      - Wallet
+      parameters:
+      - name: wallet_address
+        in: path
+        required: true
+        description: Wallet address to check
+        schema:
+          type: string
+      - name: collection_address
+        in: query
+        required: true
+        description: NFT collection contract address to check holding in
+        schema:
+          type: string
+      - $ref: '#/components/parameters/Chain'
+      - name: min_count
+        in: query
+        description: Minimum number of NFTs the wallet must hold
+        schema:
+          type: integer
+          default: 1
+      responses:
+        '200':
+          description: NFT holder eligibility result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/wallet/{wallet_address}/eligibility/token:
+    get:
+      operationId: checkTokenHolderEligibility
+      summary: Verify token holder eligibility
+      description: 'Checks whether a given wallet address holds at least a minimum balance of a specific token. Used for verifying token-gated campaign or quest eligibility.
+
+        '
+      tags:
+      - Wallet
+      parameters:
+      - name: wallet_address
+        in: path
+        required: true
+        description: Wallet address to check
+        schema:
+          type: string
+      - name: token_address
+        in: query
+        required: true
+        description: Token contract address to check balance for
+        schema:
+          type: string
+      - $ref: '#/components/parameters/Chain'
+      - name: min_balance
+        in: query
+        description: Minimum token balance required for eligibility
+        schema:
+          type: number
+          format: double
+          default: 0
+      responses:
+        '200':
+          description: Token holder eligibility result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EligibilityResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /api/v1/users/{user_id}/accounts:
+    post:
+      operationId: linkWalletAccount
+      summary: Link wallet to user account
+      description: 'Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.
+
+        '
+      tags:
+      - Wallet
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        description: Unique identifier of the user
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LinkWalletRequest'
+            examples:
+              link_metamask:
+                summary: Link a MetaMask wallet
+                value:
+                  wallet_address: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+                  wallet_type: EoA
+                  wallet_provider: metamask
+      responses:
+        '200':
+          description: Wallet linked successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  parameters:
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
+  schemas:
+    LinkWalletRequest:
+      type: object
+      required:
+      - wallet_address
+      properties:
+        wallet_address:
+          type: string
+          description: Blockchain wallet address to link to the user
+          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+        wallet_type:
+          type: string
+          description: Type of wallet account (EoA = Externally Owned Account)
+          enum:
+          - EoA
+          - contract
+          default: EoA
+        wallet_provider:
+          type: string
+          description: Wallet provider or connector used
+          example: metamask
+          default: metamask
+    EligibilityResult:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+        eligible:
+          type: boolean
+          description: Whether the wallet meets the eligibility criteria
+        current_balance:
+          type: number
+          format: double
+          description: Current balance or count for the checked asset
+        required_balance:
+          type: number
+          format: double
+          description: Minimum balance required for eligibility
+        checked_at:
+          type: string
+          format: date-time
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+      - ethereum
+      - bnb
+      - polygon
+      - arbitrum
+      - optimism
+      - avalanche
+      - fantom
+      - solana
+      - bitcoin
+      - sui
+      - starknet
+      - zksync
+      - celo
+      - cronos
+      - ronin
+      - moonbeam
+      - moonriver
+      - base
+      - linea
+      - scroll
+      example: ethereum
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    WalletProfile:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: The queried wallet address
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        native_balance:
+          type: number
+          format: double
+          description: Balance in chain native token
+        native_balance_usd:
+          type: number
+          format: double
+          description: Native balance value in USD
+        token_holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenHolder'
+        nft_holdings_count:
+          type: integer
+          description: Total number of NFTs held
+        defi_positions_count:
+          type: integer
+          description: Number of active DeFi positions
+        transaction_count:
+          type: integer
+          description: Total historical transaction count
+        first_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's first transaction
+        last_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's most recent transaction
+    TokenHolder:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: Address of the token holder
+        balance:
+          type: number
+          format: double
+          description: Token balance held
+        balance_usd:
+          type: number
+          format: double
+          description: Token balance value in USD
+        rank:
+          type: integer
+          description: Rank by balance (1 = largest holder)
+        percentage:
+          type: number
+          format: double
+          description: Percentage of total supply held
+  responses:
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Invalid request parameters or malformed query
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    ApiKeyHeader:
+      type: apiKey
+      in: header
+      name: X-API-KEY
+      description: Footprint Analytics API key passed as a request header
+    ApiKeyQuery:
+      type: apiKey
+      in: query
+      name: apiKey
+      description: Footprint Analytics API key passed as a query parameter
