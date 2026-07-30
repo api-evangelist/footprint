@@ -7,7 +7,20 @@ description: >
   The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections,
   and 3,000+ blockchain games, offering both no-code dashboards and programmatic
   API access for developers building Web3 data applications.
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/footprint.png
 url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/apis.yml
 created: "2026-06-14"
 modified: "2026-06-14"
@@ -22,39 +35,190 @@ tags:
   - Web3
   - Crypto
 apis:
-  - name: Footprint Analytics Data API
-    description: >
-      Unified REST and SQL API providing access to NFT, DeFi, GameFi, and token
-      analytics data across 30+ blockchain networks. Supports raw transaction
-      data, pre-computed metrics, cross-chain aggregates, floor prices, TVL,
-      DEX pool liquidity, wallet profiles, and game economics. Authentication
-      via API key. Both free and paid enterprise tiers available.
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    humanURL: https://www.footprint.network/
-    baseURL: https://api.footprint.network
-    tags:
-      - NFT
-      - DeFi
-      - GameFi
-      - Token Analytics
-      - Blockchain Data
-    properties:
-      - type: Documentation
-        url: https://docs.footprint.network/docs/get-started
-      - type: OpenAPI
-        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/openapi/openapi.yml
-      - type: Authentication
-        url: https://docs.footprint.network/reference/how-to-get-api-key
-      - type: Plans
-        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
-      - type: RateLimits
-        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
-      - type: FinOps
-        url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
-    contact:
-      - FN: Footprint Analytics Support
-        url: https://www.footprint.network/
-        email: ""
+- aid: footprint:footprint-chain-api
+  name: Footprint Analytics Chain API
+  description: Chain-level block and transaction data
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - Chain
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-chain-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+- aid: footprint:footprint-defi-api
+  name: Footprint Analytics DeFi API
+  description: DeFi protocol metrics including TVL, DEX liquidity, and yield
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - DeFi
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-defi-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+- aid: footprint:footprint-events-api
+  name: Footprint Analytics Events API
+  description: Track user events via Growth Analytics SDK
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - Events
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-events-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+- aid: footprint:footprint-gamefi-api
+  name: Footprint Analytics GameFi API
+  description: Blockchain gaming economics and player analytics
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - GameFi
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-gamefi-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+- aid: footprint:footprint-nft-api
+  name: Footprint Analytics NFT API
+  description: NFT collection and token market data
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - NFT
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-nft-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+- aid: footprint:footprint-query-api
+  name: Footprint Analytics Query API
+  description: Execute SQL queries against blockchain datasets
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - Query
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-query-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+- aid: footprint:footprint-token-api
+  name: Footprint Analytics Token API
+  description: Token price, supply, and holder analytics
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - Token
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-token-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
+- aid: footprint:footprint-wallet-api
+  name: Footprint Analytics Wallet API
+  description: Wallet profile, portfolio, and eligibility checks
+  humanURL: https://www.footprint.network/
+  baseURL: https://api.footprint.network
+  tags:
+  - Wallet
+  properties:
+  - type: OpenAPI
+    url: openapi/footprint-wallet-api-openapi.yml
+  - type: Documentation
+    url: https://docs.footprint.network/docs/get-started
+  - type: Authentication
+    url: https://docs.footprint.network/reference/how-to-get-api-key
+  - type: Plans
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/plans/plans.yml
+  - type: RateLimits
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/rate-limits/rate-limits.yml
+  - type: FinOps
+    url: >-
+      https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
 common:
   - type: AgenticAccess
     url: agentic-access/footprint-agentic-access.yml
