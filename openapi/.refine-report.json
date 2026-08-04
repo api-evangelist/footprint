@@ -1,0 +1,28 @@
+{
+  "provider": "footprint",
+  "sources": [
+    "footprint-chain-api-openapi.yml",
+    "footprint-defi-api-openapi.yml",
+    "footprint-events-api-openapi.yml",
+    "footprint-gamefi-api-openapi.yml",
+    "footprint-nft-api-openapi.yml",
+    "footprint-query-api-openapi.yml",
+    "footprint-token-api-openapi.yml",
+    "footprint-wallet-api-openapi.yml"
+  ],
+  "outputs": [
+    "footprint-chain-api-openapi.yml",
+    "footprint-defi-api-openapi.yml",
+    "footprint-events-api-openapi.yml",
+    "footprint-gamefi-api-openapi.yml",
+    "footprint-nft-api-openapi.yml",
+    "footprint-query-api-openapi.yml",
+    "footprint-token-api-openapi.yml",
+    "footprint-wallet-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
