@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Footprint Analytics Data Chain GameFi API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "GameFi",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List GameFi games",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/gamefi/games",
+            "params": [
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip for pagination"
+              },
+              {
+                "name": "genre",
+                "value": "",
+                "type": "query",
+                "description": "Game genre filter"
+              }
+            ]
+          },
+          "docs": "Returns a list of blockchain games tracked by Footprint Analytics with player counts, transaction volumes, and token economic metrics.\n"
+        },
+        {
+          "info": {
+            "name": "Get game economic metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/gamefi/games/:game_id/metrics",
+            "params": [
+              {
+                "name": "game_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the blockchain game"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for time-range queries (YYYY-MM-DD)"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for time-range queries (YYYY-MM-DD)"
+              }
+            ]
+          },
+          "docs": "Returns on-chain economic metrics for a specific blockchain game including daily active wallets, transaction volume, token price, and player retention statistics.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

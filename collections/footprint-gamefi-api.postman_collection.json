@@ -1,0 +1,494 @@
+{
+  "item": [
+    {
+      "id": "04a0fdd2-60a3-4704-995d-67e964573eb0",
+      "name": "GameFi",
+      "description": {
+        "content": "Blockchain gaming economics and player analytics",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f2a38fc9-9e7c-4a71-adff-dbbc6caa66fe",
+          "name": "List GameFi games",
+          "request": {
+            "name": "List GameFi games",
+            "description": {
+              "content": "Returns a list of blockchain games tracked by Footprint Analytics with player counts, transaction volumes, and token economic metrics.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "gamefi",
+                "games"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "chain",
+                  "value": "<string>",
+                  "description": "Blockchain network to query"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Maximum number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of results to skip for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "genre",
+                  "value": "<string>",
+                  "description": "Game genre filter"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7121064b-7183-4e33-980c-66f05f5d0ef3",
+              "name": "List of GameFi games",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "gamefi",
+                    "games"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "chain",
+                      "value": "ethereum"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "genre",
+                      "value": "RPG"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"game_id\": \"string\",\n      \"game_name\": \"string\",\n      \"chain\": \"ethereum\",\n      \"genre\": \"string\",\n      \"dau\": 1883,\n      \"mau\": 9253,\n      \"token_symbol\": \"string\",\n      \"updated_at\": \"2013-12-24T06:25:41.774Z\"\n    },\n    {\n      \"game_id\": \"string\",\n      \"game_name\": \"string\",\n      \"chain\": \"ethereum\",\n      \"genre\": \"string\",\n      \"dau\": 5408,\n      \"mau\": 5601,\n      \"token_symbol\": \"string\",\n      \"updated_at\": \"2006-12-30T15:30:28.706Z\"\n    }\n  ],\n  \"total\": 3427,\n  \"limit\": 494,\n  \"offset\": 6407\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3904ec8-06f3-4379-8a92-648b3acf1afb",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "gamefi",
+                    "games"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "chain",
+                      "value": "ethereum"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "genre",
+                      "value": "RPG"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 8589.233037301312\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a3cd783-3ad8-413e-bc78-16771ccdb8b0",
+          "name": "Get game economic metrics",
+          "request": {
+            "name": "Get game economic metrics",
+            "description": {
+              "content": "Returns on-chain economic metrics for a specific blockchain game including daily active wallets, transaction volume, token price, and player retention statistics.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "gamefi",
+                "games",
+                ":game_id",
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Start date for time-range queries (YYYY-MM-DD)"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End date for time-range queries (YYYY-MM-DD)"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "game_id",
+                  "description": "(Required) Unique identifier of the blockchain game"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "86462684-d8f5-4d70-a8b0-470c6cd17dd6",
+              "name": "Game metrics",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "gamefi",
+                    "games",
+                    ":game_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-12-31"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "game_id",
+                      "description": "(Required) Unique identifier of the blockchain game"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"game_id\": \"string\",\n  \"data\": [\n    {\n      \"date\": \"1997-03-02\",\n      \"dau\": 4272,\n      \"transactions\": 612,\n      \"volume_usd\": 9106.337540982111,\n      \"token_price_usd\": 3370.9835831730893\n    },\n    {\n      \"date\": \"1961-12-06\",\n      \"dau\": 8169,\n      \"transactions\": 6197,\n      \"volume_usd\": 743.3258008003373,\n      \"token_price_usd\": 6528.44577590602\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b1428d2-2823-4798-9098-392be87d1f02",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "gamefi",
+                    "games",
+                    ":game_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-12-31"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "game_id",
+                      "description": "(Required) Unique identifier of the blockchain game"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 8589.233037301312\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2eb54078-7883-48ef-9602-64d41cb8c5a3",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "gamefi",
+                    "games",
+                    ":game_id",
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-12-31"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "game_id",
+                      "description": "(Required) Unique identifier of the blockchain game"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": \"string\",\n      \"key_1\": 8589.233037301312\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.footprint.network",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "b860b3ee-b88e-4d0d-915b-ee2a65858755",
+    "name": "Footprint Analytics Data Chain GameFi API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.\n\n\nContact Support:\n Name: Footprint Analytics Support",
+      "type": "text/plain"
+    }
+  }
+}

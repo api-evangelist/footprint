@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Footprint Analytics Data Chain API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Chain",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get chain block data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/chain/:chain/blocks",
+            "params": [
+              {
+                "name": "chain",
+                "value": "",
+                "type": "path",
+                "description": "Blockchain network identifier"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "from_block",
+                "value": "",
+                "type": "query",
+                "description": "Start block number"
+              }
+            ]
+          },
+          "docs": "Returns recent block data for the specified blockchain including block height, timestamp, transaction count, and gas metrics.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

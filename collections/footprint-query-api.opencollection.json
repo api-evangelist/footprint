@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Footprint Analytics Data Chain Query API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Query",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute a SQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.footprint.network/api/v1/query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Execute a SQL query against the Footprint Analytics blockchain dataset using Trino/Presto-compatible SQL. Supports joins across on-chain tables covering NFTs, DeFi, GameFi, tokens, wallets, and raw transactions across 30+ chains. Use LIMIT clauses and specific field selections to optimize query performance.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

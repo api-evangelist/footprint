@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Footprint Analytics Data Chain DeFi API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "DeFi",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List DeFi protocols",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/defi/protocols",
+            "params": [
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip for pagination"
+              },
+              {
+                "name": "category",
+                "value": "",
+                "type": "query",
+                "description": "DeFi protocol category filter"
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of DeFi protocols tracked by Footprint Analytics, including TVL, volume, and yield metrics across 30+ chains.\n"
+        },
+        {
+          "info": {
+            "name": "Get protocol TVL history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/defi/protocols/:protocol_id/tvl",
+            "params": [
+              {
+                "name": "protocol_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the DeFi protocol"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query",
+                "description": "Start date for time-range queries (YYYY-MM-DD)"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query",
+                "description": "End date for time-range queries (YYYY-MM-DD)"
+              },
+              {
+                "name": "granularity",
+                "value": "",
+                "type": "query",
+                "description": "Time series granularity"
+              }
+            ]
+          },
+          "docs": "Returns historical Total Value Locked (TVL) data for a specific DeFi protocol. Supports daily granularity across a date range.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

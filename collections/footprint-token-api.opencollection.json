@@ -1,0 +1,131 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Footprint Analytics Data Chain Token API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Token",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get token information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/tokens/:token_address",
+            "params": [
+              {
+                "name": "token_address",
+                "value": "",
+                "type": "path",
+                "description": "Contract address of the token"
+              },
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              }
+            ]
+          },
+          "docs": "Returns token metadata, price, market cap, supply, and holder analytics for a specific token contract address on the specified chain.\n"
+        },
+        {
+          "info": {
+            "name": "Get token holders",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/tokens/:token_address/holders",
+            "params": [
+              {
+                "name": "token_address",
+                "value": "",
+                "type": "path",
+                "description": "Contract address of the token"
+              },
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "Number of results to skip for pagination"
+              },
+              {
+                "name": "min_balance",
+                "value": "",
+                "type": "query",
+                "description": "Minimum token balance filter"
+              }
+            ]
+          },
+          "docs": "Returns a ranked list of token holders with wallet addresses and balances for the specified token contract. Useful for verifying holder eligibility in campaigns and quests.\n"
+        },
+        {
+          "info": {
+            "name": "Verify token holder eligibility",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/wallet/:wallet_address/eligibility/token",
+            "params": [
+              {
+                "name": "wallet_address",
+                "value": "",
+                "type": "path",
+                "description": "Wallet address to check"
+              },
+              {
+                "name": "token_address",
+                "value": "",
+                "type": "query",
+                "description": "Token contract address to check balance for"
+              },
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              },
+              {
+                "name": "min_balance",
+                "value": "",
+                "type": "query",
+                "description": "Minimum token balance required for eligibility"
+              }
+            ]
+          },
+          "docs": "Checks whether a given wallet address holds at least a minimum balance of a specific token. Used for verifying token-gated campaign or quest eligibility.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

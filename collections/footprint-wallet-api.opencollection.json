@@ -1,0 +1,148 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Footprint Analytics Data Chain Wallet API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Wallet",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get wallet profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/wallet/:wallet_address/profile",
+            "params": [
+              {
+                "name": "wallet_address",
+                "value": "",
+                "type": "path",
+                "description": "Wallet address to query"
+              },
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              }
+            ]
+          },
+          "docs": "Returns a comprehensive on-chain profile for a wallet address including token balances, NFT holdings, DeFi positions, transaction history summary, and cross-chain activity.\n"
+        },
+        {
+          "info": {
+            "name": "Verify NFT holder eligibility",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/wallet/:wallet_address/eligibility/nft",
+            "params": [
+              {
+                "name": "wallet_address",
+                "value": "",
+                "type": "path",
+                "description": "Wallet address to check"
+              },
+              {
+                "name": "collection_address",
+                "value": "",
+                "type": "query",
+                "description": "NFT collection contract address to check holding in"
+              },
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              },
+              {
+                "name": "min_count",
+                "value": "",
+                "type": "query",
+                "description": "Minimum number of NFTs the wallet must hold"
+              }
+            ]
+          },
+          "docs": "Checks whether a given wallet address currently holds tokens from a specific NFT collection. Used for verifying NFT-gated campaign or quest eligibility.\n"
+        },
+        {
+          "info": {
+            "name": "Verify token holder eligibility",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.footprint.network/api/v1/wallet/:wallet_address/eligibility/token",
+            "params": [
+              {
+                "name": "wallet_address",
+                "value": "",
+                "type": "path",
+                "description": "Wallet address to check"
+              },
+              {
+                "name": "token_address",
+                "value": "",
+                "type": "query",
+                "description": "Token contract address to check balance for"
+              },
+              {
+                "name": "chain",
+                "value": "",
+                "type": "query",
+                "description": "Blockchain network to query"
+              },
+              {
+                "name": "min_balance",
+                "value": "",
+                "type": "query",
+                "description": "Minimum token balance required for eligibility"
+              }
+            ]
+          },
+          "docs": "Checks whether a given wallet address holds at least a minimum balance of a specific token. Used for verifying token-gated campaign or quest eligibility.\n"
+        },
+        {
+          "info": {
+            "name": "Link wallet to user account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.footprint.network/api/v1/users/:user_id/accounts",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

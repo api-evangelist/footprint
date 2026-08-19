@@ -1,0 +1,512 @@
+{
+  "item": [
+    {
+      "id": "a406483c-0840-4931-8ede-43cad76650e8",
+      "name": "DeFi",
+      "description": {
+        "content": "DeFi protocol metrics including TVL, DEX liquidity, and yield",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e3c17829-f59a-4621-9412-fa3129e27cb0",
+          "name": "List DeFi protocols",
+          "request": {
+            "name": "List DeFi protocols",
+            "description": {
+              "content": "Returns a paginated list of DeFi protocols tracked by Footprint Analytics, including TVL, volume, and yield metrics across 30+ chains.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "defi",
+                "protocols"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "chain",
+                  "value": "<string>",
+                  "description": "Blockchain network to query"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Maximum number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "0",
+                  "description": "Number of results to skip for pagination"
+                },
+                {
+                  "disabled": false,
+                  "key": "category",
+                  "value": "<string>",
+                  "description": "DeFi protocol category filter"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e7fe52a3-2706-4d6a-9d92-0c5aba2dc8e4",
+              "name": "List of DeFi protocols",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "defi",
+                    "protocols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "chain",
+                      "value": "ethereum"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "category",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"protocol_id\": \"string\",\n      \"protocol_name\": \"string\",\n      \"category\": \"string\",\n      \"chain\": \"ethereum\",\n      \"tvl_usd\": 1238.0343267487303,\n      \"volume_24h_usd\": 5746.162488972969,\n      \"apy\": 9710.647205768259,\n      \"updated_at\": \"1948-04-21T00:10:36.842Z\"\n    },\n    {\n      \"protocol_id\": \"string\",\n      \"protocol_name\": \"string\",\n      \"category\": \"string\",\n      \"chain\": \"ethereum\",\n      \"tvl_usd\": 267.93658943557006,\n      \"volume_24h_usd\": 6022.542729516982,\n      \"apy\": 6871.248651768099,\n      \"updated_at\": \"1998-08-05T12:46:58.936Z\"\n    }\n  ],\n  \"total\": 3419,\n  \"limit\": 5332,\n  \"offset\": 3975\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3067a4de-cecd-48a7-8a0e-035a963465e4",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "defi",
+                    "protocols"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "chain",
+                      "value": "ethereum"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "0"
+                    },
+                    {
+                      "key": "category",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 453.75420503895424,\n      \"key_1\": 493\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1d3dd955-06ca-43f2-b14c-e54e96f13354",
+          "name": "Get protocol TVL history",
+          "request": {
+            "name": "Get protocol TVL history",
+            "description": {
+              "content": "Returns historical Total Value Locked (TVL) data for a specific DeFi protocol. Supports daily granularity across a date range.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "defi",
+                "protocols",
+                ":protocol_id",
+                "tvl"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<date>",
+                  "description": "Start date for time-range queries (YYYY-MM-DD)"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<date>",
+                  "description": "End date for time-range queries (YYYY-MM-DD)"
+                },
+                {
+                  "disabled": false,
+                  "key": "granularity",
+                  "value": "day",
+                  "description": "Time series granularity"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "protocol_id",
+                  "description": "(Required) Unique identifier of the DeFi protocol"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7e49aaee-d6f7-47e1-91ee-e0cd3c3385c5",
+              "name": "Protocol TVL history",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "defi",
+                    "protocols",
+                    ":protocol_id",
+                    "tvl"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-12-31"
+                    },
+                    {
+                      "key": "granularity",
+                      "value": "day"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "protocol_id",
+                      "description": "(Required) Unique identifier of the DeFi protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"protocol_id\": \"string\",\n  \"data\": [\n    {\n      \"date\": \"2019-05-22\",\n      \"tvl_usd\": 2718.3460087859735\n    },\n    {\n      \"date\": \"1978-04-17\",\n      \"tvl_usd\": 3471.517717016598\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a2674d40-f58a-4ee4-8311-93fa56e5ae42",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "defi",
+                    "protocols",
+                    ":protocol_id",
+                    "tvl"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-12-31"
+                    },
+                    {
+                      "key": "granularity",
+                      "value": "day"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "protocol_id",
+                      "description": "(Required) Unique identifier of the DeFi protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 453.75420503895424,\n      \"key_1\": 493\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3150e05f-09b8-4877-beb3-d7dfde502048",
+              "name": "Requested resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "defi",
+                    "protocols",
+                    ":protocol_id",
+                    "tvl"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_date",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2024-12-31"
+                    },
+                    {
+                      "key": "granularity",
+                      "value": "day"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "protocol_id",
+                      "description": "(Required) Unique identifier of the DeFi protocol"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-KEY",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": {\n    \"code\": \"string\",\n    \"message\": \"string\",\n    \"details\": {\n      \"key_0\": 453.75420503895424,\n      \"key_1\": 493\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.footprint.network",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-KEY"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ae2ca59d-32d1-4826-a8da-f6d503578074",
+    "name": "Footprint Analytics Data Chain DeFi API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.\n\n\nContact Support:\n Name: Footprint Analytics Support",
+      "type": "text/plain"
+    }
+  }
+}

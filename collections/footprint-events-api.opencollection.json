@@ -1,0 +1,87 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Footprint Analytics Data Chain Events API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-KEY",
+      "value": "{{X-API-KEY}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Track a user event",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.footprint.network/api/v1/events/track",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Record a user behavioral event via the Footprint Growth Analytics (FGA) platform. Supports standard event types (install, sign_up, login, open_app, play_game, reward) and custom event properties. Events appear in dashboards within approximately one minute of ingestion.\n"
+        },
+        {
+          "info": {
+            "name": "Set user properties",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.footprint.network/api/v1/users/:user_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create or update a user profile in the Footprint Growth Analytics platform with identity attributes and custom properties.\n"
+        },
+        {
+          "info": {
+            "name": "Link wallet to user account",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.footprint.network/api/v1/users/:user_id/accounts",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the user"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
