@@ -87,6 +87,8 @@ apis:
   humanURL: https://www.footprint.network/
   baseURL: https://api.footprint.network
   tags:
+  - Event
+  tags_raw:
   - Events
   properties:
   - type: OpenAPI
@@ -202,6 +204,8 @@ apis:
   humanURL: https://www.footprint.network/
   baseURL: https://api.footprint.network
   tags:
+  - Wallets
+  tags_raw:
   - Wallet
   properties:
   - type: OpenAPI
