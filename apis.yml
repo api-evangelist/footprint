@@ -193,6 +193,8 @@ apis:
   humanURL: https://www.footprint.network/
   baseURL: https://api.footprint.network
   tags:
+  - Tokens
+  tags_raw:
   - Token
   properties:
   - type: OpenAPI
