@@ -1,9 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Footprint Analytics Data Chain Events API
-  description: 'Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
-
-    '
+  title: Footprint Analytics Data Events API
+  description: Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
   version: 1.0.0
   contact:
     name: Footprint Analytics Support
@@ -27,9 +25,7 @@ paths:
     post:
       operationId: trackEvent
       summary: Track a user event
-      description: 'Record a user behavioral event via the Footprint Growth Analytics (FGA) platform. Supports standard event types (install, sign_up, login, open_app, play_game, reward) and custom event properties. Events appear in dashboards within approximately one minute of ingestion.
-
-        '
+      description: Record a user behavioral event via the Footprint Growth Analytics (FGA) platform. Supports standard event types (install, sign_up, login, open_app, play_game, reward) and custom event properties. Events appear in dashboards within approximately one minute of ingestion.
       tags:
       - Events
       requestBody:
@@ -72,9 +68,7 @@ paths:
     put:
       operationId: setUserProperties
       summary: Set user properties
-      description: 'Create or update a user profile in the Footprint Growth Analytics platform with identity attributes and custom properties.
-
-        '
+      description: Create or update a user profile in the Footprint Growth Analytics platform with identity attributes and custom properties.
       tags:
       - Events
       parameters:
@@ -105,9 +99,7 @@ paths:
     post:
       operationId: linkWalletAccount
       summary: Link wallet to user account
-      description: 'Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.
-
-        '
+      description: Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.
       tags:
       - Events
       parameters:
@@ -143,34 +135,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    LinkWalletRequest:
-      type: object
-      required:
-      - wallet_address
-      properties:
-        wallet_address:
-          type: string
-          description: Blockchain wallet address to link to the user
-          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
-        wallet_type:
-          type: string
-          description: Type of wallet account (EoA = Externally Owned Account)
-          enum:
-          - EoA
-          - contract
-          default: EoA
-        wallet_provider:
-          type: string
-          description: Wallet provider or connector used
-          example: metamask
-          default: metamask
-    SuccessResponse:
+    ErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-        message:
-          type: string
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
     TrackEventRequest:
       type: object
       required:
@@ -208,14 +187,32 @@ components:
           format: int64
           description: Unix timestamp of the event (defaults to server time if omitted)
           example: 1700000000
-    TrackEventResponse:
+    LinkWalletRequest:
+      type: object
+      required:
+      - wallet_address
+      properties:
+        wallet_address:
+          type: string
+          description: Blockchain wallet address to link to the user
+          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+        wallet_type:
+          type: string
+          description: Type of wallet account (EoA = Externally Owned Account)
+          enum:
+          - EoA
+          - contract
+          default: EoA
+        wallet_provider:
+          type: string
+          description: Wallet provider or connector used
+          example: metamask
+          default: metamask
+    SuccessResponse:
       type: object
       properties:
         success:
           type: boolean
-        event_id:
-          type: string
-          description: The event_id that was recorded
         message:
           type: string
     UserPropertiesRequest:
@@ -267,21 +264,16 @@ components:
               type: string
               description: IP address of the user
               example: 192.168.1.1
-    ErrorResponse:
+    TrackEventResponse:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
+        success:
+          type: boolean
+        event_id:
+          type: string
+          description: The event_id that was recorded
+        message:
+          type: string
   responses:
     Unauthorized:
       description: Missing or invalid API key

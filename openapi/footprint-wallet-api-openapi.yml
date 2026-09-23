@@ -1,9 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Footprint Analytics Data Chain Wallet API
-  description: 'Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
-
-    '
+  title: Footprint Analytics Data Wallet API
+  description: Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games. Authentication is via API key passed as a query parameter or request header.
   version: 1.0.0
   contact:
     name: Footprint Analytics Support
@@ -27,9 +25,7 @@ paths:
     get:
       operationId: getWalletProfile
       summary: Get wallet profile
-      description: 'Returns a comprehensive on-chain profile for a wallet address including token balances, NFT holdings, DeFi positions, transaction history summary, and cross-chain activity.
-
-        '
+      description: Returns a comprehensive on-chain profile for a wallet address including token balances, NFT holdings, DeFi positions, transaction history summary, and cross-chain activity.
       tags:
       - Wallet
       parameters:
@@ -56,9 +52,7 @@ paths:
     get:
       operationId: checkNftHolderEligibility
       summary: Verify NFT holder eligibility
-      description: 'Checks whether a given wallet address currently holds tokens from a specific NFT collection. Used for verifying NFT-gated campaign or quest eligibility.
-
-        '
+      description: Checks whether a given wallet address currently holds tokens from a specific NFT collection. Used for verifying NFT-gated campaign or quest eligibility.
       tags:
       - Wallet
       parameters:
@@ -94,9 +88,7 @@ paths:
     get:
       operationId: checkTokenHolderEligibility
       summary: Verify token holder eligibility
-      description: 'Checks whether a given wallet address holds at least a minimum balance of a specific token. Used for verifying token-gated campaign or quest eligibility.
-
-        '
+      description: Checks whether a given wallet address holds at least a minimum balance of a specific token. Used for verifying token-gated campaign or quest eligibility.
       tags:
       - Wallet
       parameters:
@@ -133,9 +125,7 @@ paths:
     post:
       operationId: linkWalletAccount
       summary: Link wallet to user account
-      description: 'Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.
-
-        '
+      description: Associate a blockchain wallet address with a user account to enable cross-chain and cross-identity analytics in the Footprint Growth Analytics platform.
       tags:
       - Wallet
       parameters:
@@ -170,14 +160,84 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
   schemas:
+    WalletProfile:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: The queried wallet address
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        native_balance:
+          type: number
+          format: double
+          description: Balance in chain native token
+        native_balance_usd:
+          type: number
+          format: double
+          description: Native balance value in USD
+        token_holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenHolder'
+        nft_holdings_count:
+          type: integer
+          description: Total number of NFTs held
+        defi_positions_count:
+          type: integer
+          description: Number of active DeFi positions
+        transaction_count:
+          type: integer
+          description: Total historical transaction count
+        first_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's first transaction
+        last_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's most recent transaction
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+      - ethereum
+      - bnb
+      - polygon
+      - arbitrum
+      - optimism
+      - avalanche
+      - fantom
+      - solana
+      - bitcoin
+      - sui
+      - starknet
+      - zksync
+      - celo
+      - cronos
+      - ronin
+      - moonbeam
+      - moonriver
+      - base
+      - linea
+      - scroll
+      example: ethereum
     LinkWalletRequest:
       type: object
       required:
@@ -218,90 +278,6 @@ components:
         checked_at:
           type: string
           format: date-time
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-    ChainEnum:
-      type: string
-      description: Supported blockchain network identifier
-      enum:
-      - ethereum
-      - bnb
-      - polygon
-      - arbitrum
-      - optimism
-      - avalanche
-      - fantom
-      - solana
-      - bitcoin
-      - sui
-      - starknet
-      - zksync
-      - celo
-      - cronos
-      - ronin
-      - moonbeam
-      - moonriver
-      - base
-      - linea
-      - scroll
-      example: ethereum
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
-    WalletProfile:
-      type: object
-      properties:
-        wallet_address:
-          type: string
-          description: The queried wallet address
-        chain:
-          $ref: '#/components/schemas/ChainEnum'
-        native_balance:
-          type: number
-          format: double
-          description: Balance in chain native token
-        native_balance_usd:
-          type: number
-          format: double
-          description: Native balance value in USD
-        token_holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenHolder'
-        nft_holdings_count:
-          type: integer
-          description: Total number of NFTs held
-        defi_positions_count:
-          type: integer
-          description: Number of active DeFi positions
-        transaction_count:
-          type: integer
-          description: Total historical transaction count
-        first_tx_at:
-          type: string
-          format: date-time
-          description: Timestamp of the wallet's first transaction
-        last_tx_at:
-          type: string
-          format: date-time
-          description: Timestamp of the wallet's most recent transaction
     TokenHolder:
       type: object
       properties:
@@ -323,6 +299,13 @@ components:
           type: number
           format: double
           description: Percentage of total supply held
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
   responses:
     NotFound:
       description: Requested resource not found
@@ -342,6 +325,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

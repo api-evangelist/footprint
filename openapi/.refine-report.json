@@ -1,14 +1,7 @@
 {
   "provider": "footprint",
   "sources": [
-    "footprint-chain-api-openapi.yml",
-    "footprint-defi-api-openapi.yml",
-    "footprint-events-api-openapi.yml",
-    "footprint-gamefi-api-openapi.yml",
-    "footprint-nft-api-openapi.yml",
-    "footprint-query-api-openapi.yml",
-    "footprint-token-api-openapi.yml",
-    "footprint-wallet-api-openapi.yml"
+    "_original/openapi.yml"
   ],
   "outputs": [
     "footprint-chain-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "footprint-chain-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "footprint-defi-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "footprint-events-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "footprint-gamefi-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "footprint-nft-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "footprint-query-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "footprint-token-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "footprint-wallet-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
