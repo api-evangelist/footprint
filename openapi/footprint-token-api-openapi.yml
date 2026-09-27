@@ -155,6 +155,25 @@ components:
         updated_at:
           type: string
           format: date-time
+    EligibilityResult:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+        eligible:
+          type: boolean
+          description: Whether the wallet meets the eligibility criteria
+        current_balance:
+          type: number
+          format: double
+          description: Current balance or count for the checked asset
+        required_balance:
+          type: number
+          format: double
+          description: Minimum balance required for eligibility
+        checked_at:
+          type: string
+          format: date-time
     ErrorResponse:
       type: object
       properties:
@@ -208,25 +227,6 @@ components:
             $ref: '#/components/schemas/TokenHolder'
         total:
           type: integer
-    EligibilityResult:
-      type: object
-      properties:
-        wallet_address:
-          type: string
-        eligible:
-          type: boolean
-          description: Whether the wallet meets the eligibility criteria
-        current_balance:
-          type: number
-          format: double
-          description: Current balance or count for the checked asset
-        required_balance:
-          type: number
-          format: double
-          description: Minimum balance required for eligibility
-        checked_at:
-          type: string
-          format: date-time
     TokenHolder:
       type: object
       properties:
@@ -249,14 +249,14 @@ components:
           format: double
           description: Percentage of total supply held
   responses:
-    NotFound:
-      description: Requested resource not found
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Missing or invalid API key
+    NotFound:
+      description: Requested resource not found
       content:
         application/json:
           schema:
@@ -271,6 +271,12 @@ components:
         minimum: 1
         maximum: 1000
         default: 20
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
     Offset:
       name: offset
       in: query
@@ -279,12 +285,6 @@ components:
         type: integer
         minimum: 0
         default: 0
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

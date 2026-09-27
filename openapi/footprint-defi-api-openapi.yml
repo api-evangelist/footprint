@@ -84,79 +84,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    TvlHistoryResponse:
-      type: object
-      properties:
-        protocol_id:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TvlDataPoint'
-    DefiProtocolListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DefiProtocol'
-        total:
-          type: integer
-        limit:
-          type: integer
-        offset:
-          type: integer
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
-    TvlDataPoint:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          description: Date of the TVL snapshot
-        tvl_usd:
-          type: number
-          format: double
-          description: Total Value Locked in USD at that date
-    ChainEnum:
-      type: string
-      description: Supported blockchain network identifier
-      enum:
-      - ethereum
-      - bnb
-      - polygon
-      - arbitrum
-      - optimism
-      - avalanche
-      - fantom
-      - solana
-      - bitcoin
-      - sui
-      - starknet
-      - zksync
-      - celo
-      - cronos
-      - ronin
-      - moonbeam
-      - moonriver
-      - base
-      - linea
-      - scroll
-      example: ethereum
     DefiProtocol:
       type: object
       properties:
@@ -186,20 +113,105 @@ components:
         updated_at:
           type: string
           format: date-time
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    TvlHistoryResponse:
+      type: object
+      properties:
+        protocol_id:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TvlDataPoint'
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+      - ethereum
+      - bnb
+      - polygon
+      - arbitrum
+      - optimism
+      - avalanche
+      - fantom
+      - solana
+      - bitcoin
+      - sui
+      - starknet
+      - zksync
+      - celo
+      - cronos
+      - ronin
+      - moonbeam
+      - moonriver
+      - base
+      - linea
+      - scroll
+      example: ethereum
+    TvlDataPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          description: Date of the TVL snapshot
+        tvl_usd:
+          type: number
+          format: double
+          description: Total Value Locked in USD at that date
+    DefiProtocolListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/DefiProtocol'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
   responses:
-    NotFound:
-      description: Requested resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Missing or invalid API key
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Requested resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   parameters:
+    Granularity:
+      name: granularity
+      in: query
+      description: Time series granularity
+      schema:
+        type: string
+        enum:
+        - hour
+        - day
+        - week
+        - month
+        default: day
     Limit:
       name: limit
       in: query
@@ -209,6 +221,12 @@ components:
         minimum: 1
         maximum: 1000
         default: 20
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
     StartDate:
       name: start_date
       in: query
@@ -233,24 +251,6 @@ components:
         type: integer
         minimum: 0
         default: 0
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
-    Granularity:
-      name: granularity
-      in: query
-      description: Time series granularity
-      schema:
-        type: string
-        enum:
-        - hour
-        - day
-        - week
-        - month
-        default: day
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

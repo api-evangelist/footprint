@@ -76,6 +76,15 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    GameMetricsResponse:
+      type: object
+      properties:
+        game_id:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameMetricsDataPoint'
     GameListResponse:
       type: object
       properties:
@@ -129,6 +138,26 @@ components:
       - linea
       - scroll
       example: ethereum
+    GameMetricsDataPoint:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+        dau:
+          type: integer
+          description: Daily active wallets
+        transactions:
+          type: integer
+          description: Number of on-chain transactions
+        volume_usd:
+          type: number
+          format: double
+          description: Transaction volume in USD
+        token_price_usd:
+          type: number
+          format: double
+          description: In-game token price in USD
     Game:
       type: object
       properties:
@@ -155,44 +184,15 @@ components:
         updated_at:
           type: string
           format: date-time
-    GameMetricsResponse:
-      type: object
-      properties:
-        game_id:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GameMetricsDataPoint'
-    GameMetricsDataPoint:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        dau:
-          type: integer
-          description: Daily active wallets
-        transactions:
-          type: integer
-          description: Number of on-chain transactions
-        volume_usd:
-          type: number
-          format: double
-          description: Transaction volume in USD
-        token_price_usd:
-          type: number
-          format: double
-          description: In-game token price in USD
   responses:
-    NotFound:
-      description: Requested resource not found
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Missing or invalid API key
+    NotFound:
+      description: Requested resource not found
       content:
         application/json:
           schema:
@@ -207,6 +207,12 @@ components:
         minimum: 1
         maximum: 1000
         default: 20
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
     StartDate:
       name: start_date
       in: query
@@ -231,12 +237,6 @@ components:
         type: integer
         minimum: 0
         default: 0
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

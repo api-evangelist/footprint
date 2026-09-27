@@ -119,46 +119,6 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
-    ChainEnum:
-      type: string
-      description: Supported blockchain network identifier
-      enum:
-      - ethereum
-      - bnb
-      - polygon
-      - arbitrum
-      - optimism
-      - avalanche
-      - fantom
-      - solana
-      - bitcoin
-      - sui
-      - starknet
-      - zksync
-      - celo
-      - cronos
-      - ronin
-      - moonbeam
-      - moonriver
-      - base
-      - linea
-      - scroll
-      example: ethereum
     NftCollectionListResponse:
       type: object
       properties:
@@ -191,6 +151,21 @@ components:
         checked_at:
           type: string
           format: date-time
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
     NftCollection:
       type: object
       properties:
@@ -228,15 +203,40 @@ components:
           type: string
           format: date-time
           description: Timestamp of the most recent data update
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+      - ethereum
+      - bnb
+      - polygon
+      - arbitrum
+      - optimism
+      - avalanche
+      - fantom
+      - solana
+      - bitcoin
+      - sui
+      - starknet
+      - zksync
+      - celo
+      - cronos
+      - ronin
+      - moonbeam
+      - moonriver
+      - base
+      - linea
+      - scroll
+      example: ethereum
   responses:
-    NotFound:
-      description: Requested resource not found
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Missing or invalid API key
+    NotFound:
+      description: Requested resource not found
       content:
         application/json:
           schema:
@@ -257,6 +257,12 @@ components:
         minimum: 1
         maximum: 1000
         default: 20
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
     Offset:
       name: offset
       in: query
@@ -265,12 +271,6 @@ components:
         type: integer
         minimum: 0
         default: 0
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

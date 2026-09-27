@@ -135,6 +135,27 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    LinkWalletRequest:
+      type: object
+      required:
+      - wallet_address
+      properties:
+        wallet_address:
+          type: string
+          description: Blockchain wallet address to link to the user
+          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+        wallet_type:
+          type: string
+          description: Type of wallet account (EoA = Externally Owned Account)
+          enum:
+          - EoA
+          - contract
+          default: EoA
+        wallet_provider:
+          type: string
+          description: Wallet provider or connector used
+          example: metamask
+          default: metamask
     ErrorResponse:
       type: object
       properties:
@@ -150,6 +171,13 @@ components:
             details:
               type: object
               additionalProperties: true
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
     TrackEventRequest:
       type: object
       required:
@@ -187,34 +215,6 @@ components:
           format: int64
           description: Unix timestamp of the event (defaults to server time if omitted)
           example: 1700000000
-    LinkWalletRequest:
-      type: object
-      required:
-      - wallet_address
-      properties:
-        wallet_address:
-          type: string
-          description: Blockchain wallet address to link to the user
-          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
-        wallet_type:
-          type: string
-          description: Type of wallet account (EoA = Externally Owned Account)
-          enum:
-          - EoA
-          - contract
-          default: EoA
-        wallet_provider:
-          type: string
-          description: Wallet provider or connector used
-          example: metamask
-          default: metamask
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
     UserPropertiesRequest:
       type: object
       required:

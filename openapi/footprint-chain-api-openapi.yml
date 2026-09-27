@@ -53,31 +53,15 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    Block:
+    BlockListResponse:
       type: object
       properties:
-        block_number:
-          type: integer
-          format: int64
-          description: Block height
-        block_hash:
-          type: string
-          description: Block hash
-        block_timestamp:
-          type: string
-          format: date-time
-          description: Block production timestamp
-        transaction_count:
-          type: integer
-          description: Number of transactions in the block
-        gas_used:
-          type: integer
-          format: int64
-          description: Total gas consumed by the block (EVM chains only)
-        gas_limit:
-          type: integer
-          format: int64
-          description: Maximum gas allowed for the block (EVM chains only)
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
     ErrorResponse:
       type: object
       properties:
@@ -93,15 +77,6 @@ components:
             details:
               type: object
               additionalProperties: true
-    BlockListResponse:
-      type: object
-      properties:
-        chain:
-          $ref: '#/components/schemas/ChainEnum'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Block'
     ChainEnum:
       type: string
       description: Supported blockchain network identifier
@@ -127,6 +102,31 @@ components:
       - linea
       - scroll
       example: ethereum
+    Block:
+      type: object
+      properties:
+        block_number:
+          type: integer
+          format: int64
+          description: Block height
+        block_hash:
+          type: string
+          description: Block hash
+        block_timestamp:
+          type: string
+          format: date-time
+          description: Block production timestamp
+        transaction_count:
+          type: integer
+          description: Number of transactions in the block
+        gas_used:
+          type: integer
+          format: int64
+          description: Total gas consumed by the block (EVM chains only)
+        gas_limit:
+          type: integer
+          format: int64
+          description: Maximum gas allowed for the block (EVM chains only)
   responses:
     Unauthorized:
       description: Missing or invalid API key
