@@ -64,6 +64,25 @@ paths:
           $ref: '#/components/responses/InternalError'
 components:
   schemas:
+    QueryRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: 'SQL query string using Trino/Presto-compatible syntax. Tables cover nft, defi, gamefi, token, wallet, and raw chain data. Use LIMIT and specific field selections for best performance.
+
+            '
+          example: SELECT * FROM nft_collection_daily_stats LIMIT 10
+        parameters:
+          type: object
+          description: Named parameters to bind into the query
+          additionalProperties:
+            oneOf:
+            - type: string
+            - type: number
+            - type: boolean
     QueryResponse:
       type: object
       properties:
@@ -84,25 +103,15 @@ components:
         execution_time_ms:
           type: integer
           description: Query execution duration in milliseconds
-    QueryRequest:
+    ColumnMeta:
       type: object
-      required:
-      - query
       properties:
-        query:
+        name:
           type: string
-          description: 'SQL query string using Trino/Presto-compatible syntax. Tables cover nft, defi, gamefi, token, wallet, and raw chain data. Use LIMIT and specific field selections for best performance.
-
-            '
-          example: SELECT * FROM nft_collection_daily_stats LIMIT 10
-        parameters:
-          type: object
-          description: Named parameters to bind into the query
-          additionalProperties:
-            oneOf:
-            - type: string
-            - type: number
-            - type: boolean
+          description: Column name
+        type:
+          type: string
+          description: Data type of the column (e.g., varchar, bigint, double, timestamp)
     ErrorResponse:
       type: object
       properties:
@@ -118,16 +127,13 @@ components:
             details:
               type: object
               additionalProperties: true
-    ColumnMeta:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Column name
-        type:
-          type: string
-          description: Data type of the column (e.g., varchar, bigint, double, timestamp)
   responses:
+    BadRequest:
+      description: Invalid request parameters or malformed query
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     RateLimited:
       description: Rate limit exceeded
       headers:
@@ -147,12 +153,6 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Invalid request parameters or malformed query
       content:
         application/json:
           schema:

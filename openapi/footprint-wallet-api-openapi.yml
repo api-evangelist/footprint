@@ -161,27 +161,13 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    LinkWalletRequest:
+    SuccessResponse:
       type: object
-      required:
-      - wallet_address
       properties:
-        wallet_address:
+        success:
+          type: boolean
+        message:
           type: string
-          description: Blockchain wallet address to link to the user
-          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
-        wallet_type:
-          type: string
-          description: Type of wallet account (EoA = Externally Owned Account)
-          enum:
-          - EoA
-          - contract
-          default: EoA
-        wallet_provider:
-          type: string
-          description: Wallet provider or connector used
-          example: metamask
-          default: metamask
     WalletProfile:
       type: object
       properties:
@@ -219,40 +205,6 @@ components:
           type: string
           format: date-time
           description: Timestamp of the wallet's most recent transaction
-    EligibilityResult:
-      type: object
-      properties:
-        wallet_address:
-          type: string
-        eligible:
-          type: boolean
-          description: Whether the wallet meets the eligibility criteria
-        current_balance:
-          type: number
-          format: double
-          description: Current balance or count for the checked asset
-        required_balance:
-          type: number
-          format: double
-          description: Minimum balance required for eligibility
-        checked_at:
-          type: string
-          format: date-time
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
     ChainEnum:
       type: string
       description: Supported blockchain network identifier
@@ -278,13 +230,61 @@ components:
       - linea
       - scroll
       example: ethereum
-    SuccessResponse:
+    LinkWalletRequest:
+      type: object
+      required:
+      - wallet_address
+      properties:
+        wallet_address:
+          type: string
+          description: Blockchain wallet address to link to the user
+          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+        wallet_type:
+          type: string
+          description: Type of wallet account (EoA = Externally Owned Account)
+          enum:
+          - EoA
+          - contract
+          default: EoA
+        wallet_provider:
+          type: string
+          description: Wallet provider or connector used
+          example: metamask
+          default: metamask
+    ErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-        message:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    EligibilityResult:
+      type: object
+      properties:
+        wallet_address:
           type: string
+        eligible:
+          type: boolean
+          description: Whether the wallet meets the eligibility criteria
+        current_balance:
+          type: number
+          format: double
+          description: Current balance or count for the checked asset
+        required_balance:
+          type: number
+          format: double
+          description: Minimum balance required for eligibility
+        checked_at:
+          type: string
+          format: date-time
     TokenHolder:
       type: object
       properties:
@@ -307,8 +307,8 @@ components:
           format: double
           description: Percentage of total supply held
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
+    NotFound:
+      description: Requested resource not found
       content:
         application/json:
           schema:
@@ -319,8 +319,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    NotFound:
-      description: Requested resource not found
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:

@@ -135,6 +135,23 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    TrackEventResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        event_id:
+          type: string
+          description: The event_id that was recorded
+        message:
+          type: string
     LinkWalletRequest:
       type: object
       required:
@@ -171,50 +188,6 @@ components:
             details:
               type: object
               additionalProperties: true
-    SuccessResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        message:
-          type: string
-    TrackEventRequest:
-      type: object
-      required:
-      - event_id
-      - event_type
-      - user_id
-      - event_name
-      properties:
-        event_id:
-          type: string
-          description: Unique identifier for this event instance
-          example: evt_abc123
-        event_type:
-          type: string
-          description: 'Standardized event type category. Standard values are: install, sign_up, login, open_app, play_game, reward. Custom types are also supported.
-
-            '
-          example: login
-        user_id:
-          type: string
-          description: Identifier of the user who performed the event
-          example: user_456
-        event_name:
-          type: string
-          description: Human-readable label for the event
-          example: login
-        event_properties:
-          type: object
-          description: 'Custom key-value metadata associated with the event. Stored in the extra_data field for downstream analysis.
-
-            '
-          additionalProperties: true
-        time:
-          type: integer
-          format: int64
-          description: Unix timestamp of the event (defaults to server time if omitted)
-          example: 1700000000
     UserPropertiesRequest:
       type: object
       required:
@@ -264,25 +237,52 @@ components:
               type: string
               description: IP address of the user
               example: 192.168.1.1
-    TrackEventResponse:
+    TrackEventRequest:
       type: object
+      required:
+      - event_id
+      - event_type
+      - user_id
+      - event_name
       properties:
-        success:
-          type: boolean
         event_id:
           type: string
-          description: The event_id that was recorded
-        message:
+          description: Unique identifier for this event instance
+          example: evt_abc123
+        event_type:
           type: string
+          description: 'Standardized event type category. Standard values are: install, sign_up, login, open_app, play_game, reward. Custom types are also supported.
+
+            '
+          example: login
+        user_id:
+          type: string
+          description: Identifier of the user who performed the event
+          example: user_456
+        event_name:
+          type: string
+          description: Human-readable label for the event
+          example: login
+        event_properties:
+          type: object
+          description: 'Custom key-value metadata associated with the event. Stored in the extra_data field for downstream analysis.
+
+            '
+          additionalProperties: true
+        time:
+          type: integer
+          format: int64
+          description: Unix timestamp of the event (defaults to server time if omitted)
+          example: 1700000000
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
+    BadRequest:
+      description: Invalid request parameters or malformed query
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Invalid request parameters or malformed query
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:
