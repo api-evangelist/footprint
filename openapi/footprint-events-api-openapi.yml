@@ -135,23 +135,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    SuccessResponse:
+    ErrorResponse:
       type: object
       properties:
-        success:
-          type: boolean
-        message:
-          type: string
-    TrackEventResponse:
-      type: object
-      properties:
-        success:
-          type: boolean
-        event_id:
-          type: string
-          description: The event_id that was recorded
-        message:
-          type: string
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
     LinkWalletRequest:
       type: object
       required:
@@ -173,21 +171,60 @@ components:
           description: Wallet provider or connector used
           example: metamask
           default: metamask
-    ErrorResponse:
+    SuccessResponse:
       type: object
       properties:
-        error:
+        success:
+          type: boolean
+        message:
+          type: string
+    TrackEventResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        event_id:
+          type: string
+          description: The event_id that was recorded
+        message:
+          type: string
+    TrackEventRequest:
+      type: object
+      required:
+      - event_id
+      - event_type
+      - user_id
+      - event_name
+      properties:
+        event_id:
+          type: string
+          description: Unique identifier for this event instance
+          example: evt_abc123
+        event_type:
+          type: string
+          description: 'Standardized event type category. Standard values are: install, sign_up, login, open_app, play_game, reward. Custom types are also supported.
+
+            '
+          example: login
+        user_id:
+          type: string
+          description: Identifier of the user who performed the event
+          example: user_456
+        event_name:
+          type: string
+          description: Human-readable label for the event
+          example: login
+        event_properties:
           type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
+          description: 'Custom key-value metadata associated with the event. Stored in the extra_data field for downstream analysis.
+
+            '
+          additionalProperties: true
+        time:
+          type: integer
+          format: int64
+          description: Unix timestamp of the event (defaults to server time if omitted)
+          example: 1700000000
     UserPropertiesRequest:
       type: object
       required:
@@ -237,43 +274,6 @@ components:
               type: string
               description: IP address of the user
               example: 192.168.1.1
-    TrackEventRequest:
-      type: object
-      required:
-      - event_id
-      - event_type
-      - user_id
-      - event_name
-      properties:
-        event_id:
-          type: string
-          description: Unique identifier for this event instance
-          example: evt_abc123
-        event_type:
-          type: string
-          description: 'Standardized event type category. Standard values are: install, sign_up, login, open_app, play_game, reward. Custom types are also supported.
-
-            '
-          example: login
-        user_id:
-          type: string
-          description: Identifier of the user who performed the event
-          example: user_456
-        event_name:
-          type: string
-          description: Human-readable label for the event
-          example: login
-        event_properties:
-          type: object
-          description: 'Custom key-value metadata associated with the event. Stored in the extra_data field for downstream analysis.
-
-            '
-          additionalProperties: true
-        time:
-          type: integer
-          format: int64
-          description: Unix timestamp of the event (defaults to server time if omitted)
-          example: 1700000000
   responses:
     BadRequest:
       description: Invalid request parameters or malformed query

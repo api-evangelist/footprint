@@ -75,20 +75,88 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
+  parameters:
+    StartDate:
+      name: start_date
+      in: query
+      description: Start date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: '2024-01-01'
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
+    EndDate:
+      name: end_date
+      in: query
+      description: End date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: '2024-12-31'
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of results to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 20
+    Offset:
+      name: offset
+      in: query
+      description: Number of results to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
   schemas:
-    GameListResponse:
+    ErrorResponse:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Game'
-        total:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    Game:
+      type: object
+      properties:
+        game_id:
+          type: string
+          description: Unique identifier for the game
+        game_name:
+          type: string
+          description: Display name of the game
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        genre:
+          type: string
+          description: Game genre (RPG, Strategy, Sports, etc.)
+        dau:
           type: integer
-        limit:
+          description: Daily active wallets (last 24 hours)
+        mau:
           type: integer
-        offset:
-          type: integer
+          description: Monthly active wallets (last 30 days)
+        token_symbol:
+          type: string
+          description: Primary in-game token symbol
+        updated_at:
+          type: string
+          format: date-time
     GameMetricsDataPoint:
       type: object
       properties:
@@ -134,47 +202,19 @@ components:
       - linea
       - scroll
       example: ethereum
-    ErrorResponse:
+    GameListResponse:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
-    Game:
-      type: object
-      properties:
-        game_id:
-          type: string
-          description: Unique identifier for the game
-        game_name:
-          type: string
-          description: Display name of the game
-        chain:
-          $ref: '#/components/schemas/ChainEnum'
-        genre:
-          type: string
-          description: Game genre (RPG, Strategy, Sports, etc.)
-        dau:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+        total:
           type: integer
-          description: Daily active wallets (last 24 hours)
-        mau:
+        limit:
           type: integer
-          description: Monthly active wallets (last 30 days)
-        token_symbol:
-          type: string
-          description: Primary in-game token symbol
-        updated_at:
-          type: string
-          format: date-time
+        offset:
+          type: integer
     GameMetricsResponse:
       type: object
       properties:
@@ -184,46 +224,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/GameMetricsDataPoint'
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      description: Maximum number of results to return
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 1000
-        default: 20
-    StartDate:
-      name: start_date
-      in: query
-      description: Start date for time-range queries (YYYY-MM-DD)
-      schema:
-        type: string
-        format: date
-        example: '2024-01-01'
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
-    Offset:
-      name: offset
-      in: query
-      description: Number of results to skip for pagination
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
-    EndDate:
-      name: end_date
-      in: query
-      description: End date for time-range queries (YYYY-MM-DD)
-      schema:
-        type: string
-        format: date
-        example: '2024-12-31'
   responses:
     NotFound:
       description: Requested resource not found

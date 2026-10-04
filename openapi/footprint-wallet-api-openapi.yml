@@ -161,6 +161,21 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
     SuccessResponse:
       type: object
       properties:
@@ -168,43 +183,27 @@ components:
           type: boolean
         message:
           type: string
-    WalletProfile:
+    LinkWalletRequest:
       type: object
+      required:
+      - wallet_address
       properties:
         wallet_address:
           type: string
-          description: The queried wallet address
-        chain:
-          $ref: '#/components/schemas/ChainEnum'
-        native_balance:
-          type: number
-          format: double
-          description: Balance in chain native token
-        native_balance_usd:
-          type: number
-          format: double
-          description: Native balance value in USD
-        token_holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenHolder'
-        nft_holdings_count:
-          type: integer
-          description: Total number of NFTs held
-        defi_positions_count:
-          type: integer
-          description: Number of active DeFi positions
-        transaction_count:
-          type: integer
-          description: Total historical transaction count
-        first_tx_at:
+          description: Blockchain wallet address to link to the user
+          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+        wallet_type:
           type: string
-          format: date-time
-          description: Timestamp of the wallet's first transaction
-        last_tx_at:
+          description: Type of wallet account (EoA = Externally Owned Account)
+          enum:
+          - EoA
+          - contract
+          default: EoA
+        wallet_provider:
           type: string
-          format: date-time
-          description: Timestamp of the wallet's most recent transaction
+          description: Wallet provider or connector used
+          example: metamask
+          default: metamask
     ChainEnum:
       type: string
       description: Supported blockchain network identifier
@@ -230,42 +229,6 @@ components:
       - linea
       - scroll
       example: ethereum
-    LinkWalletRequest:
-      type: object
-      required:
-      - wallet_address
-      properties:
-        wallet_address:
-          type: string
-          description: Blockchain wallet address to link to the user
-          example: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
-        wallet_type:
-          type: string
-          description: Type of wallet account (EoA = Externally Owned Account)
-          enum:
-          - EoA
-          - contract
-          default: EoA
-        wallet_provider:
-          type: string
-          description: Wallet provider or connector used
-          example: metamask
-          default: metamask
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
     EligibilityResult:
       type: object
       properties:
@@ -306,6 +269,50 @@ components:
           type: number
           format: double
           description: Percentage of total supply held
+    WalletProfile:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+          description: The queried wallet address
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        native_balance:
+          type: number
+          format: double
+          description: Balance in chain native token
+        native_balance_usd:
+          type: number
+          format: double
+          description: Native balance value in USD
+        token_holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenHolder'
+        nft_holdings_count:
+          type: integer
+          description: Total number of NFTs held
+        defi_positions_count:
+          type: integer
+          description: Number of active DeFi positions
+        transaction_count:
+          type: integer
+          description: Total historical transaction count
+        first_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's first transaction
+        last_tx_at:
+          type: string
+          format: date-time
+          description: Timestamp of the wallet's most recent transaction
+  parameters:
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
   responses:
     NotFound:
       description: Requested resource not found
@@ -325,13 +332,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-  parameters:
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
   securitySchemes:
     ApiKeyHeader:
       type: apiKey

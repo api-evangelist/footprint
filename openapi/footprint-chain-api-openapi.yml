@@ -52,17 +52,31 @@ paths:
         '401':
           $ref: '#/components/responses/Unauthorized'
 components:
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      description: Maximum number of results to return
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 1000
-        default: 20
   schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    BlockListResponse:
+      type: object
+      properties:
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Block'
     ChainEnum:
       type: string
       description: Supported blockchain network identifier
@@ -113,30 +127,16 @@ components:
           type: integer
           format: int64
           description: Maximum gas allowed for the block (EVM chains only)
-    ErrorResponse:
-      type: object
-      properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
-    BlockListResponse:
-      type: object
-      properties:
-        chain:
-          $ref: '#/components/schemas/ChainEnum'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Block'
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of results to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 20
   responses:
     Unauthorized:
       description: Missing or invalid API key
