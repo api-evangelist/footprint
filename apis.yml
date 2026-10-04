@@ -37,6 +37,9 @@ url: https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/
 created: "2026-06-14"
 modified: "2026-06-14"
 specificationVersion: '0.23'
+x-docs-platform: readme
+x-docs-platform-confidence: high
+x-docs-platform-checked: 2026-10-03
 tags:
   - Blockchain
   - DeFi
@@ -238,6 +241,9 @@ apis:
     url: >-
       https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
 common:
+  - type: CapabilityMap
+    url: capabilities/footprint-capability-edges.yml
+    name: Footprint Analytics Business Capability Map
   - type: AgenticAccess
     url: agentic-access/footprint-agentic-access.yml
   - type: DomainSecurity
