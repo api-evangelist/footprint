@@ -241,6 +241,12 @@ apis:
     url: >-
       https://raw.githubusercontent.com/api-evangelist/footprint/refs/heads/main/finops/finops.yml
 common:
+  - type: Plans
+    url: plans/plans.yml
+  - type: RateLimits
+    url: rate-limits/rate-limits.yml
+  - type: FinOps
+    url: finops/finops.yml
   - type: CapabilityMap
     url: capabilities/footprint-capability-edges.yml
     name: Footprint Analytics Business Capability Map
