@@ -119,6 +119,63 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    EligibilityResult:
+      type: object
+      properties:
+        wallet_address:
+          type: string
+        eligible:
+          type: boolean
+          description: Whether the wallet meets the eligibility criteria
+        current_balance:
+          type: number
+          format: double
+          description: Current balance or count for the checked asset
+        required_balance:
+          type: number
+          format: double
+          description: Minimum balance required for eligibility
+        checked_at:
+          type: string
+          format: date-time
+    NftCollectionListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/NftCollection'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+    ChainEnum:
+      type: string
+      description: Supported blockchain network identifier
+      enum:
+      - ethereum
+      - bnb
+      - polygon
+      - arbitrum
+      - optimism
+      - avalanche
+      - fantom
+      - solana
+      - bitcoin
+      - sui
+      - starknet
+      - zksync
+      - celo
+      - cronos
+      - ronin
+      - moonbeam
+      - moonriver
+      - base
+      - linea
+      - scroll
+      example: ethereum
     ErrorResponse:
       type: object
       properties:
@@ -171,64 +228,15 @@ components:
           type: string
           format: date-time
           description: Timestamp of the most recent data update
-    NftCollectionListResponse:
-      type: object
-      properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/NftCollection'
-        total:
-          type: integer
-        limit:
-          type: integer
-        offset:
-          type: integer
-    ChainEnum:
-      type: string
-      description: Supported blockchain network identifier
-      enum:
-      - ethereum
-      - bnb
-      - polygon
-      - arbitrum
-      - optimism
-      - avalanche
-      - fantom
-      - solana
-      - bitcoin
-      - sui
-      - starknet
-      - zksync
-      - celo
-      - cronos
-      - ronin
-      - moonbeam
-      - moonriver
-      - base
-      - linea
-      - scroll
-      example: ethereum
-    EligibilityResult:
-      type: object
-      properties:
-        wallet_address:
-          type: string
-        eligible:
-          type: boolean
-          description: Whether the wallet meets the eligibility criteria
-        current_balance:
-          type: number
-          format: double
-          description: Current balance or count for the checked asset
-        required_balance:
-          type: number
-          format: double
-          description: Minimum balance required for eligibility
-        checked_at:
-          type: string
-          format: date-time
   parameters:
+    Offset:
+      name: offset
+      in: query
+      description: Number of results to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
     Chain:
       name: chain
       in: query
@@ -244,14 +252,6 @@ components:
         minimum: 1
         maximum: 1000
         default: 20
-    Offset:
-      name: offset
-      in: query
-      description: Number of results to skip for pagination
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
   responses:
     NotFound:
       description: Requested resource not found

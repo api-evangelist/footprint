@@ -119,21 +119,25 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    ErrorResponse:
+    EligibilityResult:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
+        wallet_address:
+          type: string
+        eligible:
+          type: boolean
+          description: Whether the wallet meets the eligibility criteria
+        current_balance:
+          type: number
+          format: double
+          description: Current balance or count for the checked asset
+        required_balance:
+          type: number
+          format: double
+          description: Minimum balance required for eligibility
+        checked_at:
+          type: string
+          format: date-time
     TokenInfo:
       type: object
       properties:
@@ -195,25 +199,34 @@ components:
       - linea
       - scroll
       example: ethereum
-    EligibilityResult:
+    ErrorResponse:
       type: object
       properties:
-        wallet_address:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+    TokenHolderListResponse:
+      type: object
+      properties:
+        token_address:
           type: string
-        eligible:
-          type: boolean
-          description: Whether the wallet meets the eligibility criteria
-        current_balance:
-          type: number
-          format: double
-          description: Current balance or count for the checked asset
-        required_balance:
-          type: number
-          format: double
-          description: Minimum balance required for eligibility
-        checked_at:
-          type: string
-          format: date-time
+        chain:
+          $ref: '#/components/schemas/ChainEnum'
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TokenHolder'
+        total:
+          type: integer
     TokenHolder:
       type: object
       properties:
@@ -235,20 +248,15 @@ components:
           type: number
           format: double
           description: Percentage of total supply held
-    TokenHolderListResponse:
-      type: object
-      properties:
-        token_address:
-          type: string
-        chain:
-          $ref: '#/components/schemas/ChainEnum'
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/TokenHolder'
-        total:
-          type: integer
   parameters:
+    Offset:
+      name: offset
+      in: query
+      description: Number of results to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
     Chain:
       name: chain
       in: query
@@ -264,14 +272,6 @@ components:
         minimum: 1
         maximum: 1000
         default: 20
-    Offset:
-      name: offset
-      in: query
-      description: Number of results to skip for pagination
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
   responses:
     NotFound:
       description: Requested resource not found

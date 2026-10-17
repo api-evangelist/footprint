@@ -75,62 +75,49 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    StartDate:
-      name: start_date
-      in: query
-      description: Start date for time-range queries (YYYY-MM-DD)
-      schema:
-        type: string
-        format: date
-        example: '2024-01-01'
-    Chain:
-      name: chain
-      in: query
-      description: Blockchain network to query
-      schema:
-        $ref: '#/components/schemas/ChainEnum'
-    EndDate:
-      name: end_date
-      in: query
-      description: End date for time-range queries (YYYY-MM-DD)
-      schema:
-        type: string
-        format: date
-        example: '2024-12-31'
-    Limit:
-      name: limit
-      in: query
-      description: Maximum number of results to return
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 1000
-        default: 20
-    Offset:
-      name: offset
-      in: query
-      description: Number of results to skip for pagination
-      schema:
-        type: integer
-        minimum: 0
-        default: 0
   schemas:
-    ErrorResponse:
+    GameMetricsDataPoint:
       type: object
       properties:
-        error:
-          type: object
-          properties:
-            code:
-              type: string
-              description: Machine-readable error code
-            message:
-              type: string
-              description: Human-readable error message
-            details:
-              type: object
-              additionalProperties: true
+        date:
+          type: string
+          format: date
+        dau:
+          type: integer
+          description: Daily active wallets
+        transactions:
+          type: integer
+          description: Number of on-chain transactions
+        volume_usd:
+          type: number
+          format: double
+          description: Transaction volume in USD
+        token_price_usd:
+          type: number
+          format: double
+          description: In-game token price in USD
+    GameMetricsResponse:
+      type: object
+      properties:
+        game_id:
+          type: string
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GameMetricsDataPoint'
+    GameListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Game'
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
     Game:
       type: object
       properties:
@@ -157,26 +144,6 @@ components:
         updated_at:
           type: string
           format: date-time
-    GameMetricsDataPoint:
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-        dau:
-          type: integer
-          description: Daily active wallets
-        transactions:
-          type: integer
-          description: Number of on-chain transactions
-        volume_usd:
-          type: number
-          format: double
-          description: Transaction volume in USD
-        token_price_usd:
-          type: number
-          format: double
-          description: In-game token price in USD
     ChainEnum:
       type: string
       description: Supported blockchain network identifier
@@ -202,28 +169,61 @@ components:
       - linea
       - scroll
       example: ethereum
-    GameListResponse:
+    ErrorResponse:
       type: object
       properties:
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Game'
-        total:
-          type: integer
-        limit:
-          type: integer
-        offset:
-          type: integer
-    GameMetricsResponse:
-      type: object
-      properties:
-        game_id:
-          type: string
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/GameMetricsDataPoint'
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              description: Machine-readable error code
+            message:
+              type: string
+              description: Human-readable error message
+            details:
+              type: object
+              additionalProperties: true
+  parameters:
+    StartDate:
+      name: start_date
+      in: query
+      description: Start date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: '2024-01-01'
+    Offset:
+      name: offset
+      in: query
+      description: Number of results to skip for pagination
+      schema:
+        type: integer
+        minimum: 0
+        default: 0
+    Limit:
+      name: limit
+      in: query
+      description: Maximum number of results to return
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 20
+    Chain:
+      name: chain
+      in: query
+      description: Blockchain network to query
+      schema:
+        $ref: '#/components/schemas/ChainEnum'
+    EndDate:
+      name: end_date
+      in: query
+      description: End date for time-range queries (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+        example: '2024-12-31'
   responses:
     NotFound:
       description: Requested resource not found
