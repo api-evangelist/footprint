@@ -64,63 +64,161 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains.
+Footprint Analytics is a blockchain data analytics platform providing unified REST and SQL APIs for querying DeFi protocol metrics, NFT market data, token analytics, GameFi economics, and on-chain activity across 30+ chains including Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, and Sui. The platform indexes 30,000+ protocols, 100M+ tokens, 2M+ NFT collections, and 3,000+ blockchain games, offering both no-code dashboards and programmatic API access for developers building Web3 data applications.
 
-## Overview
+**Areas:** Blockchain · DeFi · NFT · GameFi · Token Analytics · On-Chain Data · Web3 · Cryptocurrency
 
-- **Website**: https://www.footprint.network/
-- **Documentation**: https://docs.footprint.network/docs/get-started
-- **GitHub**: https://github.com/footprintanalytics
-- **API Reference**: https://fp-api.readme.io/
+## Footprint Analytics on APIs.io
 
-## Data Coverage
+Everything profiled for Footprint Analytics is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/footprint/](https://apis.io/providers/footprint/)** — or go straight to one of the APIs or properties below.
 
-- 30+ blockchain networks (Ethereum, Bitcoin, Solana, BNB Chain, Polygon, Arbitrum, Optimism, Sui, Starknet, and more)
-- 30,000+ DeFi protocols
-- 100M+ tokens
-- 2M+ NFT collections
-- 3,000+ blockchain games
-- 400M+ wallet addresses
+### APIs (8)
 
-## API Categories
+- [Footprint Analytics Chain API](https://apis.io/apis/footprint/footprint-chain-api/) — Chain-level block and transaction data
+- [Footprint Analytics DeFi API](https://apis.io/apis/footprint/footprint-defi-api/) — DeFi protocol metrics including TVL, DEX liquidity, and yield
+- [Footprint Analytics Events API](https://apis.io/apis/footprint/footprint-events-api/) — Track user events via Growth Analytics SDK
+- [Footprint Analytics GameFi API](https://apis.io/apis/footprint/footprint-gamefi-api/) — Blockchain gaming economics and player analytics
+- [Footprint Analytics NFT API](https://apis.io/apis/footprint/footprint-nft-api/) — NFT collection and token market data
+- [Footprint Analytics Query API](https://apis.io/apis/footprint/footprint-query-api/) — Execute SQL queries against blockchain datasets
+- [Footprint Analytics Token API](https://apis.io/apis/footprint/footprint-token-api/) — Token price, supply, and holder analytics
+- [Footprint Analytics Wallet API](https://apis.io/apis/footprint/footprint-wallet-api/) — Wallet profile, portfolio, and eligibility checks
 
-- **NFT**: Collection floor prices, sales volume, ownership, transfer history, metadata, wash trade filtering
-- **DeFi**: TVL, DEX pool liquidity, protocol metrics, lending rates, options transactions
-- **GameFi**: Game economics, player metrics, token flows, in-game asset data
-- **Token Analytics**: Cross-chain token prices, market cap, holder distribution
-- **Wallet**: On-chain activity profiles, cross-chain holdings
+### Published properties
 
-## Authentication
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-API key authentication. Register for a free API key at:
-https://docs.footprint.network/reference/how-to-get-api-key
+#### Agentic access (1)
 
-## Plans
+Which operations an agent can call, which act, and which need a human in the loop.
 
-| Plan | Price | Rate Limit |
-|------|-------|------------|
-| Free | $0/mo | ~30 req/min |
-| Pro | Contact | ~300 req/min |
-| Enterprise | Custom | Custom |
+- [Footprint Agentic Access](https://apis.io/agentic-access/footprint/footprint-agentic-access/)
 
-## Repository Structure
+#### JSON Schema (3)
 
-```
-footprint/
-  apis.yml              # APIs.json 0.19 provider profile
-  plans/
-    plans.yml           # Pricing plan details
-  rate-limits/
-    rate-limits.yml     # Rate limiting policies
-  finops/
-    finops.yml          # FinOps cost optimization guidance
-  README.md
-```
+The data models the API reads and writes.
 
-## Resources
+- [Footprint Analytics Query Request](https://apis.io/schemas/footprint/query/)
+- [Footprint Growth Analytics Track Event Request](https://apis.io/schemas/footprint/track-event/)
+- [Footprint Analytics Wallet Profile](https://apis.io/schemas/footprint/wallet-profile/)
 
-- [Get Started](https://docs.footprint.network/docs/get-started)
-- [API Key Registration](https://docs.footprint.network/reference/how-to-get-api-key)
-- [GitHub Organization](https://github.com/footprintanalytics)
-- [Medium Blog](https://medium.com/@footprintofficial)
-- [QuickNode Integration](https://www.quicknode.com/builders-guide/tools/data-api-by-footprint-analytics)
+#### JSON-LD (1)
+
+Linked-data contexts for the provider's vocabulary.
+
+- [Footprint Context](https://apis.io/jsonld/footprint/footprint/)
+
+#### Examples (4)
+
+Example requests and responses.
+
+- [Query Defi Tvl](https://apis.io/examples/footprint/query-defi-tvl/)
+- [Query Nft Floor Price](https://apis.io/examples/footprint/query-nft-floor-price/)
+- [Track Event](https://apis.io/examples/footprint/track-event/)
+- [Wallet Nft Eligibility](https://apis.io/examples/footprint/wallet-nft-eligibility/)
+
+#### Collections (8)
+
+Postman and Open Collection request collections.
+
+- [Footprint Analytics Data Chain API](https://apis.io/collections/footprint/open-footprint-chain-api/)
+- [Footprint Analytics Data Chain DeFi API](https://apis.io/collections/footprint/open-footprint-defi-api/)
+- [Footprint Analytics Data Chain Events API](https://apis.io/collections/footprint/open-footprint-events-api/)
+- [Footprint Analytics Data Chain GameFi API](https://apis.io/collections/footprint/open-footprint-gamefi-api/)
+- [Footprint Analytics Data Chain NFT API](https://apis.io/collections/footprint/open-footprint-nft-api/)
+- [Footprint Analytics Data Chain Query API](https://apis.io/collections/footprint/open-footprint-query-api/)
+- [Footprint Analytics Data Chain Token API](https://apis.io/collections/footprint/open-footprint-token-api/)
+- [Footprint Analytics Data Chain Wallet API](https://apis.io/collections/footprint/open-footprint-wallet-api/)
+
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Footprint Analytics — jsonschema rules](https://apis.io/rules/footprint/footprint-jsonschema-spectral-rules/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Footprint Authentication](https://apis.io/security/footprint/footprint-authentication/)
+- [Footprint Domain Security](https://apis.io/security/footprint/footprint-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Plans](https://apis.io/plans/footprint/plans/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Rate Limits](https://apis.io/rate-limits/footprint/rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Finops](https://apis.io/finops/footprint/finops/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://www.footprint.network/)
+- [Documentation](https://docs.footprint.network/docs/get-started)
+- [Pricing](https://www.footprint.network/data-api)
+- [Changelog](https://docs.footprint.network/docs/get-started)
+- [Blog](https://medium.com/@footprintofficial)
+
+## API Evangelist rating
+
+**Kin Score 27.5** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 57.0 |
+| Contract governance | 9.8 |
+| Operational transparency | 13.2 |
+| Developer ergonomics | 13.1 |
+| Access clarity | 7.9 |
+
+**Agent readiness 24.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | verified |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/footprint/](https://apis.io/providers/footprint/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Footprint Analytics: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/footprint/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
